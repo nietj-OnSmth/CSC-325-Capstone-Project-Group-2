@@ -43,13 +43,14 @@ public class SmartParkApp extends Application {
         mainContent.setPadding(new Insets(40));
 
         Label welcomeTitle = new Label("Welcome to SmartPark");
-        welcomeTitle.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
+        welcomeTitle.setStyle("-fx-font-size: 35px; -fx-font-weight: bold;");
 
         Label subtitle = new Label("Find the best parking available");
         subtitle.setStyle("-fx-text-fill: #555555;");
 
         Button studentButton = new Button("Student");
         Button facultyButton = new Button("Faculty");
+        Button visitorButton = new Button("Visitor");
 
         studentButton.setPrefWidth(220);
         studentButton.setPrefHeight(50);
@@ -57,11 +58,15 @@ public class SmartParkApp extends Application {
         facultyButton.setPrefWidth(220);
         facultyButton.setPrefHeight(50);
 
+        visitorButton.setPrefWidth(220);
+        visitorButton.setPrefHeight(50);
+
         mainContent.getChildren().addAll(
                 welcomeTitle,
                 subtitle,
                 studentButton,
-                facultyButton
+                facultyButton,
+                visitorButton
         );
 
         root.setLeft(sidebar);
