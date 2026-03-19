@@ -19,7 +19,7 @@ public class SmartParkApp extends Application {
         VBox sidebar = new VBox(20);
         sidebar.setPadding(new Insets(20));
         sidebar.setPrefWidth(200);
-        sidebar.setStyle("-fx-background-color: #1e293b;");
+        sidebar.setStyle("-fx-background-color: #0B5E3C;");
 
         Label appTitle = new Label("SmartPark");
         appTitle.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
