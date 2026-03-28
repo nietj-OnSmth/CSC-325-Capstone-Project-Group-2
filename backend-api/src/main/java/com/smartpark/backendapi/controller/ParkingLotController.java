@@ -3,15 +3,14 @@ package com.smartpark.backendapi.controller;
 import com.smartpark.backendapi.model.ParkingLot;
 import com.smartpark.backendapi.model.UserRole;
 import com.smartpark.backendapi.service.ParkingLotService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * REST controller that exposes parking-related API endpoints.
- *
- * This controller communicates with the service layer to
- * retrieve and update parking lot data.
  */
 @RestController
 @RequestMapping("/api/lots")
@@ -34,7 +33,6 @@ public class ParkingLotController {
 
     /**
      * Returns all available lots for a given user role.
-     *
      * Example:
      * /api/lots/available?role=STUDENT
      */
@@ -45,6 +43,8 @@ public class ParkingLotController {
 
     /**
      * Returns the recommended lot for the given user role.
+     * Example:
+     * /api/lots/recommended?role=STUDENT
      */
     @GetMapping("/recommended")
     public ParkingLot getRecommendedLot(@RequestParam UserRole role) {
@@ -53,12 +53,33 @@ public class ParkingLotController {
 
     /**
      * Updates the number of available spaces in a parking lot.
-     *
      * Used for admin simulation.
+     * Example:
+     * /api/lots/1/availability?spaces=0
      */
     @PutMapping("/{id}/availability")
     public ParkingLot updateAvailability(@PathVariable Long id,
                                          @RequestParam int spaces) {
         return service.updateAvailability(id, spaces);
+    }
+
+    /**
+     * Returns the next best lot when the currently selected lot becomes full.
+     * Example:
+     * /api/lots/reroute?role=STUDENT&excludedLotId=1
+     */
+    @GetMapping("/reroute")
+    public ResponseEntity<?> rerouteLot(@RequestParam UserRole role,
+                                        @RequestParam Long excludedLotId) {
+
+        ParkingLot lot = service.getNextBestLot(role, excludedLotId);
+
+        if (lot == null) {
+            return ResponseEntity
+                    .status(404)
+                    .body(Map.of("message", "No alternate parking lot available for role: " + role));
+        }
+
+        return ResponseEntity.ok(lot);
     }
 }
