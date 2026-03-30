@@ -4,6 +4,8 @@ import com.smartpark.backendapi.model.ParkingLot;
 import com.smartpark.backendapi.model.UserRole;
 import com.smartpark.backendapi.repository.ParkingLotRepository;
 import org.springframework.stereotype.Service;
+import com.smartpark.backendapi.exception.LotNotFoundException;
+import com.smartpark.backendapi.exception.NoAvailableLotException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -54,7 +56,7 @@ public class ParkingLotService {
      */
     public ParkingLot updateAvailability(Long id, int spaces) {
         ParkingLot lot = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Lot not found"));
+                .orElseThrow(() -> new LotNotFoundException(id));
 
         lot.setAvailableSpaces(spaces);
 
@@ -65,27 +67,36 @@ public class ParkingLotService {
     }
 
     /**
-     * Returns the next best parking lot after excluding a specific lot.
-     * This is used for rerouting when the user's selected lot becomes full
-     * or unavailable.
-     * @param role the user's role (STUDENT or FACULTY)
-     * @param excludedLotId the lot that should not be considered
-     * @return the next best available lot, or null if none exists
+     * Finds the next best available parking lot for a given user role,
+     * excluding a specific lot (usually the one that is full).
+     * @param role          The user's role (STUDENT or FACULTY)
+     * @param excludedLotId The ID of the lot to exclude (typically the full lot)
+     * @return The next best available ParkingLot
+     * @throws NoAvailableLotException if no valid lot is found
      */
     public ParkingLot getNextBestLot(UserRole role, Long excludedLotId) {
+
         return repository.findAll().stream()
 
-                // Only include lots valid for the selected role
+                // Step 1: Only include lots that match the user's role
                 .filter(lot -> lot.getAllowedRole() == role)
 
-                // Only include lots with open spaces
+                // Step 2: Only include lots that still have available spaces
+                // Prevents recommending full parking lots
                 .filter(lot -> lot.getAvailableSpaces() > 0)
 
-                // Exclude the lot that became full / unavailable
+                // Step 3: Exclude the lot that is already full or being avoided
+                // This ensures the same lot is not recommended again
                 .filter(lot -> !lot.getId().equals(excludedLotId))
 
-                // Return the nearest remaining valid lot
+                // Step 4: Select the "best" lot based on shortest distance
                 .min(Comparator.comparingDouble(ParkingLot::getDistance))
-                .orElse(null);
+
+                // Step 5: If no valid lot is found, throw a custom exception
+                // This will be handled by the GlobalExceptionHandler
+                .orElseThrow(() ->
+                        new NoAvailableLotException(
+                                "No alternate parking lot available for role: " + role
+                        ));
     }
 }

@@ -69,17 +69,8 @@ public class ParkingLotController {
      * /api/lots/reroute?role=STUDENT&excludedLotId=1
      */
     @GetMapping("/reroute")
-    public ResponseEntity<?> rerouteLot(@RequestParam UserRole role,
-                                        @RequestParam Long excludedLotId) {
-
-        ParkingLot lot = service.getNextBestLot(role, excludedLotId);
-
-        if (lot == null) {
-            return ResponseEntity
-                    .status(404)
-                    .body(Map.of("message", "No alternate parking lot available for role: " + role));
-        }
-
-        return ResponseEntity.ok(lot);
+    public ParkingLot rerouteLot(@RequestParam UserRole role,
+                                 @RequestParam Long excludedLotId) {
+        return service.getNextBestLot(role, excludedLotId);
     }
 }
