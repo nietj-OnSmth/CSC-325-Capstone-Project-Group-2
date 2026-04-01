@@ -12,7 +12,6 @@ public class HealthController {
 
     /**
      * Health check endpoint
-     *
      * Example:
      * http://localhost:8080/api/health
      */
