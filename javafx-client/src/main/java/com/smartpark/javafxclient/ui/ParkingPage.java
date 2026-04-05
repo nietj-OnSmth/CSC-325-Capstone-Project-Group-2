@@ -2,119 +2,48 @@ package com.smartpark.javafxclient.ui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class ParkingPage {
 
     public VBox getView() {
         VBox root = new VBox(20);
-        root.setPadding(new Insets(35));
-        root.setAlignment(Pos.TOP_CENTER);
+        root.setAlignment(Pos.CENTER);
+        root.setPadding(new Insets(40));
         root.setStyle("-fx-background-color: #F5F7F6;");
 
-        Label title = new Label("Parking Options");
+        Label title = new Label("Parking Results");
         title.setStyle(
-                "-fx-font-size: 32px;" +
-                        "-fx-font-family: 'Helvetica';" +
+                "-fx-font-size: 28px;" +
                         "-fx-font-weight: bold;" +
                         "-fx-text-fill: #0B5E3C;"
         );
 
-        Label subtitle = new Label("Available lots based on your role");
-        subtitle.setStyle(
-                "-fx-font-size: 18px;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-text-fill: #555555;"
+        Label bestLot = new Label("Best Lot: A");
+        Label spaces = new Label("Open Spaces: 25");
+        Label distance = new Label("Distance: 0.3 miles");
+
+        bestLot.setStyle("-fx-font-size: 16px;");
+        spaces.setStyle("-fx-font-size: 16px;");
+        distance.setStyle("-fx-font-size: 16px;");
+
+        Button nextButton = new Button("Next Best Lot");
+        Button backButton = new Button("Back to Dashboard");
+
+        nextButton.setPrefWidth(200);
+        backButton.setPrefWidth(200);
+
+        root.getChildren().addAll(
+                title,
+                bestLot,
+                spaces,
+                distance,
+                nextButton,
+                backButton
         );
-
-        VBox recommendedCard = new VBox(10);
-        recommendedCard.setPadding(new Insets(20));
-        recommendedCard.setMaxWidth(800);
-        recommendedCard.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-background-radius: 14;" +
-                        "-fx-border-color: #D9E2DD;" +
-                        "-fx-border-radius: 14;"
-        );
-
-        Label recTitle = new Label("Recommended Lot");
-        recTitle.setStyle(
-                "-fx-font-size: 20px;" +
-                        "-fx-font-family: 'Helvetica';" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #0B5E3C;"
-        );
-
-        Label recLot = new Label("Lot A");
-        recLot.setStyle(
-                "-fx-font-size: 18px;" +
-                        "-fx-font-family: 'Helvetica';" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #222222;"
-        );
-
-        Label recDetails = new Label("24 spaces available • Closest option for your role");
-        recDetails.setStyle(
-                "-fx-font-size: 15px;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-text-fill: #444444;"
-        );
-
-        recommendedCard.getChildren().addAll(recTitle, recLot, recDetails);
-
-        HBox lotRow = new HBox(20);
-        lotRow.setAlignment(Pos.CENTER);
-
-        VBox lot1 = createLotCard("Lot A", "24 spaces available", "Available");
-        VBox lot2 = createLotCard("Lot B", "8 spaces available", "Limited");
-        VBox lot3 = createLotCard("Lot C", "0 spaces available", "Full");
-
-        lotRow.getChildren().addAll(lot1, lot2, lot3);
-
-        root.getChildren().addAll(title, subtitle, recommendedCard, lotRow);
 
         return root;
-    }
-
-    private VBox createLotCard(String lotName, String spaces, String status) {
-        VBox card = new VBox(10);
-        card.setPadding(new Insets(18));
-        card.setPrefWidth(220);
-        card.setAlignment(Pos.CENTER_LEFT);
-        card.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-background-radius: 14;" +
-                        "-fx-border-color: #D9E2DD;" +
-                        "-fx-border-radius: 14;"
-        );
-
-        Label lotTitle = new Label(lotName);
-        lotTitle.setStyle(
-                "-fx-font-size: 18px;" +
-                        "-fx-font-family: 'Helvetica';" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #0B5E3C;"
-        );
-
-        Label spacesLabel = new Label(spaces);
-        spacesLabel.setStyle(
-                "-fx-font-size: 14px;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-text-fill: #333333;"
-        );
-
-        Label statusLabel = new Label(status);
-        statusLabel.setStyle(
-                "-fx-font-size: 14px;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #555555;"
-        );
-
-        card.getChildren().addAll(lotTitle, spacesLabel, statusLabel);
-
-        return card;
     }
 }
