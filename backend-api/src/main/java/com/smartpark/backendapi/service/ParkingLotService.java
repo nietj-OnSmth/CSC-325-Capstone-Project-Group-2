@@ -99,4 +99,63 @@ public class ParkingLotService {
                                 "No alternate parking lot available for role: " + role
                         ));
     }
+
+    /**
+     * Returns a single parking lot by its ID.
+     *
+     * @param id the ID of the parking lot
+     * @return the matching ParkingLot
+     * @throws LotNotFoundException if no lot with that ID exists
+     */
+    public ParkingLot getLotById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new LotNotFoundException(id));
+    }
+
+    /**
+     * Creates a new parking lot in the system.
+     *
+     * This should only be called by an admin user from the controller layer.
+     *
+     * @param lot the parking lot to create
+     * @return the saved ParkingLot
+     */
+    public ParkingLot createLot(ParkingLot lot) {
+        return repository.save(lot);
+    }
+
+    /**
+     * Updates an existing parking lot's details.
+     *
+     * @param id the ID of the lot to update
+     * @param updatedLot the new lot data
+     * @return the updated ParkingLot
+     * @throws LotNotFoundException if the lot does not exist
+     */
+    public ParkingLot updateLot(Long id, ParkingLot updatedLot) {
+        ParkingLot existingLot = repository.findById(id)
+                .orElseThrow(() -> new LotNotFoundException(id));
+
+        existingLot.setName(updatedLot.getName());
+        existingLot.setCapacity(updatedLot.getCapacity());
+        existingLot.setAvailableSpaces(updatedLot.getAvailableSpaces());
+        existingLot.setAllowedRole(updatedLot.getAllowedRole());
+        existingLot.setDistance(updatedLot.getDistance());
+        existingLot.setStatus(updatedLot.getStatus());
+
+        return repository.save(existingLot);
+    }
+
+    /**
+     * Deletes a parking lot from the system.
+     *
+     * @param id the ID of the lot to delete
+     * @throws LotNotFoundException if the lot does not exist
+     */
+    public void deleteLot(Long id) {
+        ParkingLot existingLot = repository.findById(id)
+                .orElseThrow(() -> new LotNotFoundException(id));
+
+        repository.delete(existingLot);
+    }
 }

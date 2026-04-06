@@ -1,5 +1,6 @@
 package com.smartpark.backendapi.controller;
 
+import com.smartpark.backendapi.exception.AccessDeniedException;
 import com.smartpark.backendapi.model.ParkingLot;
 import com.smartpark.backendapi.model.UserRole;
 import com.smartpark.backendapi.service.ParkingLotService;
@@ -29,6 +30,67 @@ public class ParkingLotController {
     @GetMapping
     public List<ParkingLot> getAllLots() {
         return service.getAllLots();
+    }
+
+    /**
+     * Returns a single parking lot by its ID.
+     * Example:
+     * /api/lots/1
+     */
+    @GetMapping("/{id}")
+    public ParkingLot getLotById(@PathVariable Long id) {
+        return service.getLotById(id);
+    }
+
+    /**
+     * Creates a new parking lot.
+     * Admin only.
+     * Example:
+     * POST /api/lots?role=ADMIN
+     */
+    @PostMapping
+    public ParkingLot createLot(@RequestBody ParkingLot lot,
+                                @RequestParam UserRole role) {
+        if (role != UserRole.ADMIN) {
+            throw new RuntimeException("Access denied: Admin Access only");
+        }
+
+        return service.createLot(lot);
+    }
+
+    /**
+     * Updates an existing parking lot's details.
+     * Admin only.
+     * Example:
+     * PUT /api/lots/1?role=ADMIN
+     */
+    @PutMapping("/{id}")
+    public ParkingLot updateLot(@PathVariable Long id,
+                                @RequestBody ParkingLot updatedLot,
+                                @RequestParam UserRole role) {
+        if (role != UserRole.ADMIN) {
+            throw new RuntimeException("Access denied: Admin Access only");
+        }
+
+        return service.updateLot(id, updatedLot);
+    }
+
+    /**
+     * Deletes a parking lot from the system.
+     * Admin only.
+     * Example:
+     * DELETE /api/lots/1?role=ADMIN
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deleteLot(@PathVariable Long id,
+                                                         @RequestParam UserRole role) {
+        if (role != UserRole.ADMIN) {
+            throw new AccessDeniedException("Access denied: Admins only");
+        }
+
+        service.deleteLot(id);
+
+        return ResponseEntity.ok(Map.of("message", "Lot deleted successfully"));
     }
 
     /**
