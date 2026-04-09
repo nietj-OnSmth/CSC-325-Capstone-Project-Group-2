@@ -34,13 +34,14 @@ public class GlobalExceptionHandler {
      * Handles access denied (admin-only) errors.
      */
     @ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public Map<String, Object> handleAccessDenied(AccessDeniedException ex) {
-        return Map.of(
-                "error", "Forbidden",
-                "message", ex.getMessage(),
-                "status", 403
-        );
+    public ResponseEntity<Map<String, Object>> handleAccessDenied(AccessDeniedException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("timestamp", LocalDateTime.now());
+        errorResponse.put("status", HttpStatus.FORBIDDEN.value());
+        errorResponse.put("error", "Forbidden");
+        errorResponse.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
     /**

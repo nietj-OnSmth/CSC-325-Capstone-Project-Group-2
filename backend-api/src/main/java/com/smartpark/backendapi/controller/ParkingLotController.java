@@ -43,6 +43,18 @@ public class ParkingLotController {
     }
 
     /**
+     * Ensures that only admins can access certain endpoints.
+     *
+     * @param role the role supplied in the request
+     * @throws AccessDeniedException if the role is not ADMIN
+     */
+    private void requireAdmin(UserRole role) {
+        if (role != UserRole.ADMIN) {
+            throw new AccessDeniedException("Access denied: Admins only");
+        }
+    }
+
+    /**
      * Creates a new parking lot.
      * Admin only.
      * Example:
@@ -51,10 +63,7 @@ public class ParkingLotController {
     @PostMapping
     public ParkingLot createLot(@RequestBody ParkingLot lot,
                                 @RequestParam UserRole role) {
-        if (role != UserRole.ADMIN) {
-            throw new RuntimeException("Access denied: Admin Access only");
-        }
-
+        requireAdmin(role);
         return service.createLot(lot);
     }
 
@@ -64,14 +73,12 @@ public class ParkingLotController {
      * Example:
      * PUT /api/lots/1?role=ADMIN
      */
+
     @PutMapping("/{id}")
     public ParkingLot updateLot(@PathVariable Long id,
                                 @RequestBody ParkingLot updatedLot,
                                 @RequestParam UserRole role) {
-        if (role != UserRole.ADMIN) {
-            throw new RuntimeException("Access denied: Admin Access only");
-        }
-
+        requireAdmin(role);
         return service.updateLot(id, updatedLot);
     }
 
@@ -81,15 +88,12 @@ public class ParkingLotController {
      * Example:
      * DELETE /api/lots/1?role=ADMIN
      */
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteLot(@PathVariable Long id,
                                                          @RequestParam UserRole role) {
-        if (role != UserRole.ADMIN) {
-            throw new AccessDeniedException("Access denied: Admins only");
-        }
-
+        requireAdmin(role);
         service.deleteLot(id);
-
         return ResponseEntity.ok(Map.of("message", "Lot deleted successfully"));
     }
 
@@ -115,13 +119,16 @@ public class ParkingLotController {
 
     /**
      * Updates the number of available spaces in a parking lot.
+     * Admin only.
      * Used for admin simulation.
      * Example:
-     * /api/lots/1/availability?spaces=0
+     * /api/lots/1/availability?spaces=0&role=ADMIN
      */
     @PutMapping("/{id}/availability")
     public ParkingLot updateAvailability(@PathVariable Long id,
-                                         @RequestParam int spaces) {
+                                         @RequestParam int spaces,
+                                         @RequestParam UserRole role) {
+        requireAdmin(role);
         return service.updateAvailability(id, spaces);
     }
 
