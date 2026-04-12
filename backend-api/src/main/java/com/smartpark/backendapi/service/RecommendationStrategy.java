@@ -10,10 +10,6 @@ import java.util.List;
  *
  * This allows different recommendation strategies to be implemented
  * without modifying the rest of the system.
- *
- * Demonstrates:
- * - Abstraction
- * - Polymorphism
  */
 public interface RecommendationStrategy {
 

@@ -6,6 +6,7 @@ import com.smartpark.backendapi.repository.ParkingLotRepository;
 import org.springframework.stereotype.Service;
 import com.smartpark.backendapi.exception.LotNotFoundException;
 import com.smartpark.backendapi.exception.NoAvailableLotException;
+import com.smartpark.backendapi.exception.AccessDeniedException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -59,11 +60,23 @@ public class ParkingLotService {
                 .orElseThrow(() -> new LotNotFoundException(id));
 
         lot.setAvailableSpaces(spaces);
-
-        // Update lot status based on remaining spaces
-        lot.setStatus(spaces > 0 ? "AVAILABLE" : "FULL");
+        lot.setStatus(determineLotStatus(spaces, lot.getCapacity()));
 
         return repository.save(lot);
+    }
+
+    /**
+     * Returns a ranking value for lot status.
+     * Lower values have higher priority.
+     */
+    private int getStatusPriority(ParkingLot lot) {
+        if ("AVAILABLE".equalsIgnoreCase(lot.getStatus())) {
+            return 1;
+        } else if ("LIMITED".equalsIgnoreCase(lot.getStatus())) {
+            return 2;
+        } else {
+            return 3;
+        }
     }
 
     /**
@@ -89,8 +102,10 @@ public class ParkingLotService {
                 // This ensures the same lot is not recommended again
                 .filter(lot -> !lot.getId().equals(excludedLotId))
 
-                // Step 4: Select the "best" lot based on shortest distance
-                .min(Comparator.comparingDouble(ParkingLot::getDistance))
+                // Step 4: Prefer AVAILABLE lots over LIMITED, then choose nearest
+                .min(Comparator
+                        .comparingInt(this::getStatusPriority)
+                        .thenComparingDouble(ParkingLot::getDistance))
 
                 // Step 5: If no valid lot is found, throw a custom exception
                 // This will be handled by the GlobalExceptionHandler
@@ -158,4 +173,104 @@ public class ParkingLotService {
 
         repository.delete(existingLot);
     }
+
+    /**
+     * Reserves a parking spot in a lot for a user with the given role.
+     *
+     * This decreases the available spaces by 1 if:
+     * - the lot exists
+     * - the user's role is allowed for that lot
+     * - the lot still has available spaces
+     *
+     * @param id the ID of the parking lot
+     * @param role the user's role
+     * @return the updated ParkingLot after reservation
+     * @throws LotNotFoundException if the lot does not exist
+     * @throws AccessDeniedException if the user's role is not allowed for the lot
+     * @throws NoAvailableLotException if the lot is already full
+     */
+    public ParkingLot reserveSpot(Long id, UserRole role) {
+        ParkingLot lot = repository.findById(id)
+                .orElseThrow(() -> new LotNotFoundException(id));
+
+        // Make sure the user is allowed to use this lot
+        if (lot.getAllowedRole() != role && role != UserRole.ADMIN) {
+            throw new AccessDeniedException("You are not allowed to reserve a spot in this lot.");
+        }
+
+        // Make sure the lot still has space
+        if (lot.getAvailableSpaces() <= 0) {
+            throw new NoAvailableLotException("This parking lot is full.");
+        }
+
+        // Decrease available spaces by 1
+        lot.setAvailableSpaces(lot.getAvailableSpaces() - 1);
+        lot.setStatus(determineLotStatus(lot.getAvailableSpaces(), lot.getCapacity()));
+
+        return repository.save(lot);
+    }
+
+    /**
+     * Releases a parking spot in a lot for a user with the given role.
+     *
+     * This increases the available spaces by 1 if:
+     * - the lot exists
+     * - the user's role is allowed for that lot
+     * - the lot is not already at full capacity
+     *
+     * @param id the ID of the parking lot
+     * @param role the user's role
+     * @return the updated ParkingLot after releasing a spot
+     * @throws LotNotFoundException if the lot does not exist
+     * @throws AccessDeniedException if the user's role is not allowed for the lot
+     * @throws IllegalStateException if the lot is already at maximum capacity
+     */
+    public ParkingLot releaseSpot(Long id, UserRole role) {
+        ParkingLot lot = repository.findById(id)
+                .orElseThrow(() -> new LotNotFoundException(id));
+
+        // Make sure the user is allowed to use this lot
+        if (lot.getAllowedRole() != role && role != UserRole.ADMIN) {
+            throw new AccessDeniedException("You are not allowed to release a spot in this lot.");
+        }
+
+        // Prevent available spaces from exceeding lot capacity
+        if (lot.getAvailableSpaces() >= lot.getCapacity()) {
+            throw new IllegalStateException("This parking lot is already at full available capacity.");
+        }
+
+        // Increase available spaces by 1
+        lot.setAvailableSpaces(lot.getAvailableSpaces() + 1);
+        lot.setStatus(determineLotStatus(lot.getAvailableSpaces(), lot.getCapacity()));
+
+        return repository.save(lot);
+    }
+
+    /**
+     * Determines the correct status of a parking lot based on
+     * available spaces and total capacity.
+     *
+     * Rules:
+     * - 0 available spaces = FULL
+     * - 1 to 20% of capacity = LIMITED
+     * - more than 20% of capacity = AVAILABLE
+     *
+     * @param availableSpaces current number of available spaces
+     * @param capacity total capacity of the lot
+     * @return the lot status as a String
+     */
+    private String determineLotStatus(int availableSpaces, int capacity) {
+        if (availableSpaces <= 0) {
+            return "FULL";
+        }
+
+        double percentageAvailable = (double) availableSpaces / capacity;
+
+        if (percentageAvailable <= 0.20) {
+            return "LIMITED";
+        }
+
+        return "AVAILABLE";
+    }
+
 }
