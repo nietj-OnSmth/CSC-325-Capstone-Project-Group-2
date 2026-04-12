@@ -137,9 +137,32 @@ public class ParkingLotController {
      * Example:
      * /api/lots/reroute?role=STUDENT&excludedLotId=1
      */
+
     @GetMapping("/reroute")
     public ParkingLot rerouteLot(@RequestParam UserRole role,
                                  @RequestParam Long excludedLotId) {
         return service.getNextBestLot(role, excludedLotId);
+    }
+
+    /**
+     * Reserves a parking spot in the specified lot.
+     * Example:
+     * POST /api/lots/1/reserve?role=STUDENT
+     */
+
+    @PostMapping("/{id}/reserve")
+    public ParkingLot reserveSpot(@PathVariable Long id,
+                                  @RequestParam UserRole role) {
+        return service.reserveSpot(id, role);
+    }
+    /**
+     * Releases a parking spot in the specified lot.
+     * Example:
+     * POST /api/lots/1/release?role=STUDENT
+     */
+    @PostMapping("/{id}/release")
+    public ParkingLot releaseSpot(@PathVariable Long id,
+                                  @RequestParam UserRole role) {
+        return service.releaseSpot(id, role);
     }
 }
