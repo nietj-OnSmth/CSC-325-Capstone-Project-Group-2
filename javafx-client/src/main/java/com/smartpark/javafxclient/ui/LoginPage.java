@@ -8,113 +8,80 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class LoginPage {
 
-    public BorderPane getView() {
-        BorderPane root = new BorderPane();
+    public StackPane getView() {
 
-        VBox sidebar = new VBox(25);
-        sidebar.setPadding(new Insets(25));
-        sidebar.setPrefWidth(200);
-        sidebar.setStyle("-fx-background-color: #0B5E3C;");
-
-        Label appTitle = new Label("SmartPark");
-        appTitle.setStyle(
-                "-fx-text-fill: white;" +
-                        "-fx-font-size: 22px;" +
-                        "-fx-font-family: 'Helvetica';" +
-                        "-fx-font-weight: bold;"
-        );
-
-        Label loginLabel = new Label("Login");
-        loginLabel.setStyle(
-                "-fx-text-fill: white;" +
-                        "-fx-font-size: 16px;" +
-                        "-fx-font-family: 'Helvetica';"
-        );
-
-        sidebar.getChildren().addAll(appTitle, loginLabel);
-
-        StackPane mainContent = new StackPane();
+        StackPane root = new StackPane();
 
         Image image = new Image(getClass().getResource("/ramincar.png").toExternalForm());
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(930);
-        imageView.setFitHeight(650);
-        imageView.setPreserveRatio(false);
-        imageView.setTranslateX(-20);
+        ImageView background = new ImageView(image);
+        background.setFitWidth(1100);
+        background.setFitHeight(650);
+        background.setPreserveRatio(false);
 
-        VBox formBox = new VBox(18);
-        formBox.setAlignment(Pos.CENTER);
-        formBox.setPadding(new Insets(35));
-        formBox.setMaxWidth(380);
-        formBox.setStyle(
-                "-fx-background-color: rgba(255,255,255,0.88);" +
-                        "-fx-background-radius: 18;"
+        VBox loginBox = new VBox(15);
+        loginBox.setAlignment(Pos.CENTER);
+        loginBox.setPadding(new Insets(30));
+        loginBox.setMaxWidth(350);
+        loginBox.setStyle(
+                "-fx-background-color: rgba(255,255,255,0.9);" +
+                        "-fx-background-radius: 15;"
         );
 
-        Label title = new Label("Welcome Back");
+        Label title = new Label("Login");
         title.setStyle(
-                "-fx-text-fill: #0B5E3C;" +
-                        "-fx-font-size: 30px;" +
+                "-fx-font-size: 26px;" +
                         "-fx-font-family: 'Helvetica';" +
-                        "-fx-font-weight: bold;"
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #0B5E3C;"
         );
 
-        Label subtitle = new Label("Sign in to continue to SmartPark");
-        subtitle.setStyle(
-                "-fx-text-fill: #444444;" +
-                        "-fx-font-size: 15px;" +
-                        "-fx-font-family: 'Arial';"
-        );
+        TextField username = new TextField();
+        username.setPromptText("Username");
+        username.setMaxWidth(250);
 
-        TextField usernameField = new TextField();
-        usernameField.setPromptText("Username");
-        usernameField.setMaxWidth(260);
-        usernameField.setStyle(
-                "-fx-background-radius: 10;" +
-                        "-fx-font-size: 14px;" +
-                        "-fx-padding: 10;"
-        );
+        PasswordField password = new PasswordField();
+        password.setPromptText("Password");
+        password.setMaxWidth(250);
 
-        PasswordField passwordField = new PasswordField();
-        passwordField.setPromptText("Password");
-        passwordField.setMaxWidth(260);
-        passwordField.setStyle(
-                "-fx-background-radius: 10;" +
-                        "-fx-font-size: 14px;" +
-                        "-fx-padding: 10;"
-        );
+        Button studentLogin = new Button("Login as Student");
+        Button adminLogin = new Button("Login as Admin");
 
-        Button loginButton = new Button("Login");
-        loginButton.setPrefWidth(260);
-        loginButton.setStyle(
+        String buttonStyle =
                 "-fx-background-color: #0B5E3C;" +
                         "-fx-text-fill: white;" +
-                        "-fx-font-size: 15px;" +
+                        "-fx-font-size: 14px;" +
                         "-fx-font-family: 'Helvetica';" +
                         "-fx-font-weight: bold;" +
                         "-fx-background-radius: 10;" +
-                        "-fx-padding: 12 24;" +
-                        "-fx-cursor: hand;"
+                        "-fx-padding: 10 20;";
+
+        studentLogin.setStyle(buttonStyle);
+        adminLogin.setStyle(buttonStyle);
+
+        studentLogin.setPrefWidth(200);
+        adminLogin.setPrefWidth(200);
+
+        Label errorMessage = new Label("Login error message would go here");
+        errorMessage.setStyle(
+                "-fx-text-fill: #cc0000;" +
+                        "-fx-font-size: 12px;"
         );
 
-        formBox.getChildren().addAll(
+        loginBox.getChildren().addAll(
                 title,
-                subtitle,
-                usernameField,
-                passwordField,
-                loginButton
+                username,
+                password,
+                studentLogin,
+                adminLogin,
+                errorMessage
         );
 
-        mainContent.getChildren().addAll(imageView, formBox);
-
-        root.setLeft(sidebar);
-        root.setCenter(mainContent);
+        root.getChildren().addAll(background, loginBox);
 
         return root;
     }
