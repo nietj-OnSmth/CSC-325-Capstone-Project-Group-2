@@ -101,7 +101,7 @@ public class LoginPage {
                 String returnedUsername = extractJsonValue(response, "username");
                 String returnedRole = extractJsonValue(response, "role");
 
-                showSuccessScreen(stage, returnedUsername, returnedRole);
+                routeToDashboard(stage, returnedUsername, returnedRole);
 
             } catch (Exception ex) {
                 String error = ex.getMessage();
@@ -120,6 +120,8 @@ public class LoginPage {
             }
         });
 
+
+
         loginBox.getChildren().addAll(
                 title,
                 usernameField,
@@ -130,6 +132,39 @@ public class LoginPage {
 
         root.getChildren().addAll(background, loginBox);
         return root;
+    }
+
+    /**
+     * Routes the user to the appropriate dashboard based on their role.
+     *
+     * This method is called after a successful login. It determines which
+     * dashboard to display (Admin, Faculty, or Student) using the role
+     * returned from the backend authentication response.
+     *
+     * @param stage    the primary JavaFX stage used to switch scenes
+     * @param username the authenticated user's username (for future use/display)
+     * @param role     the user's role (ADMIN, FACULTY, or STUDENT)
+     *
+     * @throws RuntimeException if the role is not recognized
+     */
+    private void routeToDashboard(Stage stage, String username, String role) {
+        Scene dashboardScene;
+
+        switch (role.toUpperCase()) {
+            case "ADMIN":
+                dashboardScene = new Scene(new AdminPage().getView(), 1100, 650);
+                break;
+            case "FACULTY":
+                dashboardScene = new Scene(new FacultyDashboardPage().getView(), 1100, 650);
+                break;
+            case "STUDENT":
+                dashboardScene = new Scene(new StudentDashboardPage().getView(stage), 1100, 650);
+                break;
+            default:
+                throw new RuntimeException("Unknown role: " + role);
+        }
+
+        stage.setScene(dashboardScene);
     }
 
     /**

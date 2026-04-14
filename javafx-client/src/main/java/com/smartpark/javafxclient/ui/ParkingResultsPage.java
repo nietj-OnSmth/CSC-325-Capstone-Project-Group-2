@@ -5,10 +5,34 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
+/**
+ * ParkingResultsPage displays the recommended parking lot to the user.
+ *
+ * This page receives dynamic data from the backend including:
+ * - Lot name
+ * - Available spaces
+ * - Distance from destination
+ * - Current status (AVAILABLE, LIMITED, FULL)
+ *
+ * It allows the user to review the recommendation and return to the dashboard.
+ */
 public class ParkingResultsPage {
 
-    public VBox getView() {
+    /**
+     * ParkingResultsPage displays the recommended parking lot to the user.
+     *
+     * This page receives dynamic data from the backend including:
+     * - Lot name
+     * - Available spaces
+     * - Distance from destination
+     * - Current status (AVAILABLE, LIMITED, FULL)
+     *
+     * It allows the user to review the recommendation and return to the dashboard.
+     */
+    public VBox getView(Stage stage, String lotName, String spaces, String distance, String status) {
         VBox root = new VBox(20);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(40));
@@ -33,7 +57,7 @@ public class ParkingResultsPage {
                         "-fx-border-radius: 16;"
         );
 
-        Label bestLot = new Label("Best Lot: A");
+        Label bestLot = new Label("Best Lot: " + lotName);
         bestLot.setStyle(
                 "-fx-font-size: 20px;" +
                         "-fx-font-family: 'Helvetica';" +
@@ -41,43 +65,51 @@ public class ParkingResultsPage {
                         "-fx-text-fill: #222222;"
         );
 
-        Label spaces = new Label("Open Spaces: 25");
-        spaces.setStyle(
+        Label spacesLabel = new Label("Open Spaces: " + spaces);
+        spacesLabel.setStyle(
                 "-fx-font-size: 17px;" +
                         "-fx-font-family: 'Arial';" +
                         "-fx-text-fill: #333333;"
         );
 
-        Label distance = new Label("Distance: 0.3 miles");
-        distance.setStyle(
+        Label distanceLabel = new Label("Distance: " + distance);
+        distanceLabel.setStyle(
                 "-fx-font-size: 17px;" +
                         "-fx-font-family: 'Arial';" +
                         "-fx-text-fill: #333333;"
         );
 
-        Button nextBestButton = new Button("Next Best Lot");
+        Label statusLabel = new Label("Status: " + status);
+        statusLabel.setStyle(
+                "-fx-font-size: 17px;" +
+                        "-fx-font-family: 'Arial';" +
+                        "-fx-text-fill: #333333;"
+        );
+
         Button backButton = new Button("Back to Dashboard");
-
-        String buttonStyle =
+        backButton.setStyle(
                 "-fx-background-color: #0B5E3C;" +
                         "-fx-text-fill: white;" +
                         "-fx-font-size: 15px;" +
                         "-fx-font-family: 'Helvetica';" +
                         "-fx-font-weight: bold;" +
                         "-fx-background-radius: 10;" +
-                        "-fx-padding: 12 24;";
+                        "-fx-padding: 12 24;"
+        );
 
-        nextBestButton.setStyle(buttonStyle);
-        backButton.setStyle(buttonStyle);
-
-        nextBestButton.setPrefWidth(220);
         backButton.setPrefWidth(220);
+
+        backButton.setOnAction(e -> {
+            StudentDashboardPage dashboardPage = new StudentDashboardPage();
+            Scene dashboardScene = new Scene(dashboardPage.getView(stage), 1100, 650);
+            stage.setScene(dashboardScene);
+        });
 
         resultsCard.getChildren().addAll(
                 bestLot,
-                spaces,
-                distance,
-                nextBestButton,
+                spacesLabel,
+                distanceLabel,
+                statusLabel,
                 backButton
         );
 

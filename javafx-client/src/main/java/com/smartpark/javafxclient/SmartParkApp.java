@@ -1,6 +1,5 @@
 package com.smartpark.javafxclient;
 
-import com.smartpark.javafxclient.ui.HomePage;
 import com.smartpark.javafxclient.ui.LoginPage;
 import javafx.application.Application;
 import javafx.scene.Scene;
