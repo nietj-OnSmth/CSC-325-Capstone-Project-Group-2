@@ -17,14 +17,23 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
+/**
+ * Login page for SmartPark.
+ * Sends login requests to the backend and shows a temporary success screen
+ * until full role dashboards are connected.
+ */
 public class LoginPage {
 
-    public StackPane getView() {
-    public BorderPane getView(Stage stage) {
-        BorderPane root = new BorderPane();
-
+    /**
+     * Builds and returns the login page UI.
+     *
+     * @param stage the primary stage, used for scene switching after login
+     * @return the root layout for the login page
+     */
+    public StackPane getView(Stage stage) {
         StackPane root = new StackPane();
 
         Image image = new Image(getClass().getResource("/ramincar.png").toExternalForm());
@@ -50,17 +59,15 @@ public class LoginPage {
                         "-fx-text-fill: #0B5E3C;"
         );
 
-        TextField username = new TextField();
-        username.setPromptText("Username");
-        username.setMaxWidth(250);
+        TextField usernameField = new TextField();
+        usernameField.setPromptText("Username");
+        usernameField.setMaxWidth(250);
 
-        PasswordField password = new PasswordField();
-        password.setPromptText("Password");
-        password.setMaxWidth(250);
+        PasswordField passwordField = new PasswordField();
+        passwordField.setPromptText("Password");
+        passwordField.setMaxWidth(250);
 
-        Button studentLogin = new Button("Login as Student");
-        Button adminLogin = new Button("Login as Admin");
-
+        Button loginButton = new Button("Login");
         String buttonStyle =
                 "-fx-background-color: #0B5E3C;" +
                         "-fx-text-fill: white;" +
@@ -70,42 +77,13 @@ public class LoginPage {
                         "-fx-background-radius: 10;" +
                         "-fx-padding: 10 20;";
 
-        studentLogin.setStyle(buttonStyle);
-        adminLogin.setStyle(buttonStyle);
+        loginButton.setStyle(buttonStyle);
+        loginButton.setPrefWidth(200);
 
-        studentLogin.setPrefWidth(200);
-        adminLogin.setPrefWidth(200);
-
-        Label errorMessage = new Label("Login error message would go here");
-        errorMessage.setStyle(
-                "-fx-text-fill: #cc0000;" +
-                        "-fx-font-size: 12px;"
-        );
-
-        loginBox.getChildren().addAll(
-                title,
-                username,
-                password,
-                studentLogin,
-                adminLogin,
-                errorMessage
-        );
-
-        root.getChildren().addAll(background, loginBox);
         Label messageLabel = new Label();
         messageLabel.setStyle(
-                "-fx-text-fill: #B00020;" +
-                        "-fx-font-size: 13px;" +
-                        "-fx-font-family: 'Arial';"
-        );
-
-        formBox.getChildren().addAll(
-                title,
-                subtitle,
-                usernameField,
-                passwordField,
-                loginButton,
-                messageLabel
+                "-fx-text-fill: #cc0000;" +
+                        "-fx-font-size: 12px;"
         );
 
         loginButton.setOnAction(e -> {
@@ -120,19 +98,15 @@ public class LoginPage {
             try {
                 String response = sendLoginRequest(username, password);
 
-                // super simple parsing for current backend response:
-                // {"username":"student1","role":"STUDENT"}
                 String returnedUsername = extractJsonValue(response, "username");
                 String returnedRole = extractJsonValue(response, "role");
 
                 showSuccessScreen(stage, returnedUsername, returnedRole);
 
             } catch (Exception ex) {
-
                 String error = ex.getMessage();
 
-                // Extract just the message field from backend JSON
-                if (error.contains("\"message\":\"")) {
+                if (error != null && error.contains("\"message\":\"")) {
                     int start = error.indexOf("\"message\":\"") + 11;
                     int end = error.indexOf("\"", start);
 
@@ -142,16 +116,19 @@ public class LoginPage {
                     }
                 }
 
-                // fallback
                 messageLabel.setText("Login failed. Please try again.");
             }
         });
 
-        mainContent.getChildren().addAll(imageView, formBox);
+        loginBox.getChildren().addAll(
+                title,
+                usernameField,
+                passwordField,
+                loginButton,
+                messageLabel
+        );
 
-        root.setLeft(sidebar);
-        root.setCenter(mainContent);
-
+        root.getChildren().addAll(background, loginBox);
         return root;
     }
 
@@ -172,21 +149,17 @@ public class LoginPage {
                 + "}";
 
         try (OutputStream os = conn.getOutputStream()) {
-            os.write(jsonBody.getBytes());
+            os.write(jsonBody.getBytes(StandardCharsets.UTF_8));
             os.flush();
         }
 
         int responseCode = conn.getResponseCode();
 
-        InputStream inputStream;
-        if (responseCode == 200) {
-            inputStream = conn.getInputStream();
-        } else {
-            inputStream = conn.getErrorStream();
-        }
+        InputStream inputStream =
+                (responseCode == 200) ? conn.getInputStream() : conn.getErrorStream();
 
         String response;
-        try (Scanner scanner = new Scanner(inputStream)) {
+        try (Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8)) {
             response = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
         }
 
@@ -198,7 +171,7 @@ public class LoginPage {
     }
 
     /**
-     * Very simple JSON value extractor
+     * Very simple JSON value extractor.
      * Assumes flat JSON like: {"username":"student1","role":"STUDENT"}
      */
     private String extractJsonValue(String json, String key) {
@@ -255,7 +228,7 @@ public class LoginPage {
         );
 
         backButton.setOnAction(e -> {
-            BorderPane loginView = getView(stage);
+            StackPane loginView = getView(stage);
             Scene loginScene = new Scene(loginView, 1100, 650);
             stage.setScene(loginScene);
         });
