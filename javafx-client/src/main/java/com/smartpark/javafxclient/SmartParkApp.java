@@ -1,6 +1,7 @@
 package com.smartpark.javafxclient;
 
 import com.smartpark.javafxclient.ui.HomePage;
+import com.smartpark.javafxclient.ui.LoginPage;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -9,9 +10,8 @@ public class SmartParkApp extends Application {
 
     @Override
     public void start(Stage stage) {
-        HomePage homePage = new HomePage();
-
-        Scene scene = new Scene(homePage.getView(), 1100, 650);
+        LoginPage loginPage = new LoginPage();
+        Scene scene = new Scene(loginPage.getView(stage), 1100, 650);
         stage.setTitle("SmartPark");
         stage.setScene(scene);
         stage.show();
