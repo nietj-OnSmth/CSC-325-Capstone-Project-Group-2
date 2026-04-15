@@ -32,7 +32,7 @@ public class ParkingResultsPage {
      *
      * It allows the user to review the recommendation and return to the dashboard.
      */
-    public VBox getView(Stage stage, String lotName, String spaces, String distance, String status) {
+    public VBox getView(Stage stage, String lotName, String spaces, String distance, String status, String role) {
         VBox root = new VBox(20);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(40));
@@ -100,8 +100,14 @@ public class ParkingResultsPage {
         backButton.setPrefWidth(220);
 
         backButton.setOnAction(e -> {
-            StudentDashboardPage dashboardPage = new StudentDashboardPage();
-            Scene dashboardScene = new Scene(dashboardPage.getView(stage), 1100, 650);
+            Scene dashboardScene;
+
+            if ("FACULTY".equalsIgnoreCase(role)) {
+                dashboardScene = new Scene(new FacultyDashboardPage().getView(stage), 1100, 650);
+            } else {
+                dashboardScene = new Scene(new StudentDashboardPage().getView(stage), 1100, 650);
+            }
+
             stage.setScene(dashboardScene);
         });
 

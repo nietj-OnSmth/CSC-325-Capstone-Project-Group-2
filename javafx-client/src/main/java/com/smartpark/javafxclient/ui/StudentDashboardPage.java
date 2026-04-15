@@ -2,11 +2,11 @@ package com.smartpark.javafxclient.ui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.InputStream;
@@ -21,23 +21,22 @@ import java.util.Scanner;
  * This dashboard allows students to:
  * - View their role and access level
  * - Request parking recommendations from the backend
- * - Navigate to parking results based on availability and distance
+ * - Navigate to related pages such as About, Help, and Logout
  *
  * This class is part of the JavaFX frontend and communicates with the
  * Spring Boot backend via HTTP requests.
  */
-
 public class StudentDashboardPage {
 
     /**
      * Builds and returns the Student Dashboard UI.
      *
-     * This method creates the layout, sidebar navigation, and main content area.
-     * It also attaches event handlers to buttons, including the "Find Parking"
-     * button which triggers a backend API call.
+     * This method creates the sidebar navigation and main dashboard content.
+     * It also attaches event handlers to buttons, including both the sidebar
+     * Parking button and the main Find Parking button.
      *
      * @param stage the primary JavaFX stage used for scene navigation
-     * @return the root layout (BorderPane) for the student dashboard
+     * @return the root layout for the student dashboard
      */
     public BorderPane getView(Stage stage) {
 
@@ -56,22 +55,42 @@ public class StudentDashboardPage {
                         "-fx-font-weight: bold;"
         );
 
-        Label dashboard = new Label("Dashboard");
-        Label parking = new Label("Parking");
-        Label about = new Label("About");
-        Label help = new Label("Help");
-
-        String sidebarStyle =
-                "-fx-text-fill: white;" +
+        String sidebarButtonStyle =
+                "-fx-background-color: transparent;" +
+                        "-fx-text-fill: white;" +
                         "-fx-font-size: 16px;" +
-                        "-fx-font-family: 'Helvetica';";
+                        "-fx-font-family: 'Helvetica';" +
+                        "-fx-alignment: CENTER-LEFT;" +
+                        "-fx-padding: 0;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-border-color: transparent;";
 
-        dashboard.setStyle(sidebarStyle);
-        parking.setStyle(sidebarStyle);
-        about.setStyle(sidebarStyle);
-        help.setStyle(sidebarStyle);
+        Button dashboardButton = new Button("Dashboard");
+        Button parkingButton = new Button("Parking");
+        Button aboutButton = new Button("About");
+        Button helpButton = new Button("Help");
+        Button logoutButton = new Button("Logout");
 
-        sidebar.getChildren().addAll(appTitle, dashboard, parking, about, help);
+        dashboardButton.setStyle(sidebarButtonStyle);
+        parkingButton.setStyle(sidebarButtonStyle);
+        aboutButton.setStyle(sidebarButtonStyle);
+        helpButton.setStyle(sidebarButtonStyle);
+        logoutButton.setStyle(sidebarButtonStyle);
+
+        dashboardButton.setMaxWidth(Double.MAX_VALUE);
+        parkingButton.setMaxWidth(Double.MAX_VALUE);
+        aboutButton.setMaxWidth(Double.MAX_VALUE);
+        helpButton.setMaxWidth(Double.MAX_VALUE);
+        logoutButton.setMaxWidth(Double.MAX_VALUE);
+
+        sidebar.getChildren().addAll(
+                appTitle,
+                dashboardButton,
+                parkingButton,
+                aboutButton,
+                helpButton,
+                logoutButton
+        );
 
         VBox mainContent = new VBox(20);
         mainContent.setAlignment(Pos.CENTER);
@@ -105,36 +124,49 @@ public class StudentDashboardPage {
         messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 13px;");
 
         /**
-         * Event handler for the "Find Parking" button.
-         *
-         * When clicked:
-         * 1. Sends a request to the backend to get the recommended parking lot
-         * 2. Parses the JSON response
-         * 3. Extracts lot details (name, spaces, distance, status)
-         * 4. Navigates to the ParkingResultsPage to display results
+         * Loads the student dashboard again.
          */
-        findParking.setOnAction(e -> {
-            try {
-                String response = sendRecommendedLotRequest("STUDENT");
-
-                String lotName = extractJsonValue(response, "name");
-                String spaces = extractJsonValue(response, "availableSpaces");
-                String distance = extractJsonValue(response, "distance");
-                String status = extractJsonValue(response, "status");
-
-                ParkingResultsPage resultsPage = new ParkingResultsPage();
-                Scene resultsScene = new Scene(
-                        resultsPage.getView(stage, lotName, spaces, distance, status),
-                        1100,
-                        650
-                );
-                stage.setScene(resultsScene);
-
-            } catch (Exception ex) {
-                messageLabel.setText("Unable to load parking recommendation.");
-                ex.printStackTrace();
-            }
+        dashboardButton.setOnAction(e -> {
+            Scene dashboardScene = new Scene(new StudentDashboardPage().getView(stage), 1100, 650);
+            stage.setScene(dashboardScene);
         });
+
+        /**
+         * Opens the parking recommendation flow from the sidebar.
+         */
+        parkingButton.setOnAction(e -> openRecommendedParking(stage, messageLabel));
+
+        /**
+         * Opens the About page.
+         */
+        aboutButton.setOnAction(e -> {
+            Scene aboutScene = new Scene(new AboutPage().getView(stage), 1100, 650);
+            stage.setScene(aboutScene);
+        });
+
+        /**
+         * Opens the Help page.
+         */
+        helpButton.setOnAction(e -> {
+            Scene helpScene = new Scene(new HelpPage().getView(stage), 1100, 650);
+            stage.setScene(helpScene);
+        });
+
+        /**
+         * Returns the user to the login page.
+         */
+        logoutButton.setOnAction(e -> {
+            Scene loginScene = new Scene(new LoginPage().getView(stage), 1100, 650);
+            stage.setScene(loginScene);
+        });
+
+        /**
+         * Event handler for the main Find Parking button.
+         *
+         * When clicked, it sends a request to the backend to get the
+         * recommended parking lot and then displays the result page.
+         */
+        findParking.setOnAction(e -> openRecommendedParking(stage, messageLabel));
 
         mainContent.getChildren().addAll(welcome, role, findParking, messageLabel);
 
@@ -145,17 +177,44 @@ public class StudentDashboardPage {
     }
 
     /**
-     * Sends a GET request to the backend to retrieve the recommended parking lot.
+     * Opens the parking results page using the recommended lot returned
+     * from the backend for a student user.
      *
-     * The backend uses a recommendation strategy (distance + availability)
-     * to determine the best lot for the given role.
+     * @param stage the primary stage used for navigation
+     * @param messageLabel label used to display user-facing error messages
+     */
+    private void openRecommendedParking(Stage stage, Label messageLabel) {
+        try {
+            String response = sendRecommendedLotRequest("STUDENT");
+
+            String lotName = extractJsonValue(response, "name");
+            String spaces = extractJsonValue(response, "availableSpaces");
+            String distance = extractJsonValue(response, "distance");
+            String status = extractJsonValue(response, "status");
+
+            ParkingResultsPage resultsPage = new ParkingResultsPage();
+            Scene resultsScene = new Scene(
+                    resultsPage.getView(stage, lotName, spaces, distance, status, "STUDENT"),
+                    1100,
+                    650
+            );
+            stage.setScene(resultsScene);
+
+        } catch (Exception ex) {
+            messageLabel.setText("Unable to load parking recommendation.");
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Sends a GET request to the backend to retrieve the recommended parking lot.
      *
      * Example endpoint:
      * http://localhost:8080/api/lots/recommended?role=STUDENT
      *
-     * @param role the role of the user (STUDENT)
-     * @return JSON response containing parking lot data
-     * @throws Exception if the request fails or the server returns an error
+     * @param role the role of the user
+     * @return the JSON response body
+     * @throws Exception if the request fails
      */
     private String sendRecommendedLotRequest(String role) throws Exception {
         URL url = new URL("http://localhost:8080/api/lots/recommended?role=" + role);
@@ -182,15 +241,13 @@ public class StudentDashboardPage {
     }
 
     /**
-     * Extracts a value from a JSON string based on the given key.
+     * Extracts a value from a simple JSON string using the provided key.
      *
-     * This method supports both:
-     * - String values (e.g., "name":"Lot A")
-     * - Numeric values (e.g., "availableSpaces":24)
+     * This supports string values and numeric values returned by the backend.
      *
      * @param json the JSON response as a string
      * @param key the field to extract
-     * @return the extracted value as a string, or empty if not found
+     * @return the extracted value, or an empty string if not found
      */
     private String extractJsonValue(String json, String key) {
         String stringPattern = "\"" + key + "\":\"";
