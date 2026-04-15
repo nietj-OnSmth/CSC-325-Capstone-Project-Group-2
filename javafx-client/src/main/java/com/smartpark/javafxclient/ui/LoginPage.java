@@ -152,7 +152,7 @@ public class LoginPage {
 
         switch (role.toUpperCase()) {
             case "ADMIN":
-                dashboardScene = new Scene(new AdminPage().getView(), 1100, 650);
+                dashboardScene = new Scene(new AdminPage().getView(stage), 1100, 650);
                 break;
             case "FACULTY":
                 dashboardScene = new Scene(new FacultyDashboardPage().getView(stage), 1100, 650);
