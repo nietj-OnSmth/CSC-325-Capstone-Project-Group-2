@@ -2,12 +2,28 @@ package com.smartpark.javafxclient.ui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+/**
+ * HelpPage provides instructions for using the SmartPark application.
+ *
+ * This page explains how users can choose a role, view parking options,
+ * and select the best lot. It also allows the user to return to the
+ * Student Dashboard.
+ */
 public class HelpPage {
 
-    public VBox getView() {
+    /**
+     * Builds and returns the Help page UI.
+     *
+     * @param stage the primary JavaFX stage used for navigation
+     * @return VBox layout containing the Help page content
+     */
+    public VBox getView(Stage stage) {
         VBox root = new VBox(20);
         root.setPadding(new Insets(40));
         root.setAlignment(Pos.TOP_CENTER);
@@ -54,11 +70,36 @@ public class HelpPage {
                         "-fx-text-fill: #444444;"
         );
 
-        root.getChildren().addAll(title, subtitle, section1, section2, section3, footer);
+        Button backButton = new Button("Back to Dashboard");
+        backButton.setStyle(
+                "-fx-background-color: #0B5E3C;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-font-family: 'Helvetica';" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-padding: 10 20;" +
+                        "-fx-cursor: hand;"
+        );
+
+         // Returns the user to the Student Dashboard.
+        backButton.setOnAction(e -> {
+            Scene dashboardScene = new Scene(new StudentDashboardPage().getView(stage), 1100, 650);
+            stage.setScene(dashboardScene);
+        });
+
+        root.getChildren().addAll(title, subtitle, section1, section2, section3, footer, backButton);
 
         return root;
     }
 
+    /**
+     * Creates a styled content section for the Help page.
+     *
+     * @param heading the title of the help section
+     * @param text the instructional text for that section
+     * @return a VBox containing the styled section
+     */
     private VBox createSection(String heading, String text) {
         VBox box = new VBox(8);
         box.setPadding(new Insets(20));

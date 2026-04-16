@@ -10,6 +10,8 @@ import com.smartpark.backendapi.exception.AccessDeniedException;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Service layer responsible for business logic related to parking lots.
@@ -21,22 +23,28 @@ public class ParkingLotService {
     private final ParkingLotRepository repository;
     private final RecommendationStrategy recommendationStrategy;
 
+    /**
+     * Tracks which lot each user has currently reserved.
+     * Key = username
+     * Value = lotId
+     */
+    private final Map<String, Long> userReservations = new HashMap<>();
+
     public ParkingLotService(ParkingLotRepository repository,
                              RecommendationStrategy recommendationStrategy) {
         this.repository = repository;
         this.recommendationStrategy = recommendationStrategy;
     }
 
-    /**
-     * Returns all parking lots in the system.
-     */
+
+     // Returns all parking lots in the system.
     public List<ParkingLot> getAllLots() {
         return repository.findAll();
     }
 
-    /**
-     * Returns parking lots available for a specific role.
-     */
+
+    //  Returns parking lots available for a specific role.
+
     public List<ParkingLot> getAvailableLotsForRole(UserRole role) {
         return repository.findByAllowedRole(role).stream()
                 .filter(lot -> lot.getAvailableSpaces() > 0)
@@ -175,73 +183,80 @@ public class ParkingLotService {
     }
 
     /**
-     * Reserves a parking spot in a lot for a user with the given role.
+     * Reserves a parking spot in a lot for a specific user.
      *
-     * This decreases the available spaces by 1 if:
-     * - the lot exists
-     * - the user's role is allowed for that lot
-     * - the lot still has available spaces
+     * Rules:
+     * - the lot must exist
+     * - the user's role must be allowed for the lot
+     * - the lot must still have space
+     * - the user may only hold one reservation at a time
      *
      * @param id the ID of the parking lot
      * @param role the user's role
+     * @param username the logged-in username
      * @return the updated ParkingLot after reservation
-     * @throws LotNotFoundException if the lot does not exist
-     * @throws AccessDeniedException if the user's role is not allowed for the lot
-     * @throws NoAvailableLotException if the lot is already full
      */
-    public ParkingLot reserveSpot(Long id, UserRole role) {
+    public ParkingLot reserveSpot(Long id, UserRole role, String username) {
         ParkingLot lot = repository.findById(id)
                 .orElseThrow(() -> new LotNotFoundException(id));
 
-        // Make sure the user is allowed to use this lot
         if (lot.getAllowedRole() != role && role != UserRole.ADMIN) {
             throw new AccessDeniedException("You are not allowed to reserve a spot in this lot.");
         }
 
-        // Make sure the lot still has space
         if (lot.getAvailableSpaces() <= 0) {
             throw new NoAvailableLotException("This parking lot is full.");
         }
 
-        // Decrease available spaces by 1
+        if (userReservations.containsKey(username)) {
+            throw new IllegalStateException("You already have a reserved parking spot.");
+        }
+
         lot.setAvailableSpaces(lot.getAvailableSpaces() - 1);
         lot.setStatus(determineLotStatus(lot.getAvailableSpaces(), lot.getCapacity()));
+        userReservations.put(username, id);
 
         return repository.save(lot);
     }
 
     /**
-     * Releases a parking spot in a lot for a user with the given role.
+     * Releases a parking spot for a specific user.
      *
-     * This increases the available spaces by 1 if:
-     * - the lot exists
-     * - the user's role is allowed for that lot
-     * - the lot is not already at full capacity
+     * Rules:
+     * - the lot must exist
+     * - the user's role must be allowed for the lot
+     * - the user must already hold a reservation
+     * - the reservation must belong to this lot
      *
      * @param id the ID of the parking lot
      * @param role the user's role
-     * @return the updated ParkingLot after releasing a spot
-     * @throws LotNotFoundException if the lot does not exist
-     * @throws AccessDeniedException if the user's role is not allowed for the lot
-     * @throws IllegalStateException if the lot is already at maximum capacity
+     * @param username the logged-in username
+     * @return the updated ParkingLot after release
      */
-    public ParkingLot releaseSpot(Long id, UserRole role) {
+    public ParkingLot releaseSpot(Long id, UserRole role, String username) {
         ParkingLot lot = repository.findById(id)
                 .orElseThrow(() -> new LotNotFoundException(id));
 
-        // Make sure the user is allowed to use this lot
         if (lot.getAllowedRole() != role && role != UserRole.ADMIN) {
             throw new AccessDeniedException("You are not allowed to release a spot in this lot.");
         }
 
-        // Prevent available spaces from exceeding lot capacity
+        if (!userReservations.containsKey(username)) {
+            throw new IllegalStateException("You do not have a reserved parking spot to release.");
+        }
+
+        Long reservedLotId = userReservations.get(username);
+        if (!reservedLotId.equals(id)) {
+            throw new IllegalStateException("You can only release the parking spot you reserved.");
+        }
+
         if (lot.getAvailableSpaces() >= lot.getCapacity()) {
             throw new IllegalStateException("This parking lot is already at full available capacity.");
         }
 
-        // Increase available spaces by 1
         lot.setAvailableSpaces(lot.getAvailableSpaces() + 1);
         lot.setStatus(determineLotStatus(lot.getAvailableSpaces(), lot.getCapacity()));
+        userReservations.remove(username);
 
         return repository.save(lot);
     }
