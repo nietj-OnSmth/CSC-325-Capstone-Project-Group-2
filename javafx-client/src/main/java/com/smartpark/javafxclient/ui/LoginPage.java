@@ -101,6 +101,9 @@ public class LoginPage {
                 String returnedUsername = extractJsonValue(response, "username");
                 String returnedRole = extractJsonValue(response, "role");
 
+                UserSession.setUsername(returnedUsername);
+                UserSession.setRole(returnedRole);
+
                 routeToDashboard(stage, returnedUsername, returnedRole);
 
             } catch (Exception ex) {

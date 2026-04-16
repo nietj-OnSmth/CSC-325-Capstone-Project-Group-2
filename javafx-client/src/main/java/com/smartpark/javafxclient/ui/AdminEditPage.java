@@ -210,49 +210,46 @@ public class AdminEditPage {
                 messageLabel
         );
 
-        /**
-         * Reloads the admin dashboard.
-         */
+
+        // Reloads the admin dashboard.
+
         dashboardButton.setOnAction(e -> {
             Scene dashboardScene = new Scene(new AdminPage().getView(stage), 1100, 650);
             stage.setScene(dashboardScene);
         });
 
-        /**
-         * Opens the About page.
-         */
+
+         // Opens the About page.
+
         aboutButton.setOnAction(e -> {
             Scene aboutScene = new Scene(new AboutPage().getView(stage), 1100, 650);
             stage.setScene(aboutScene);
         });
 
-        /**
-         * Opens the Help page.
-         */
+
+         // Opens the Help page.
+
         helpButton.setOnAction(e -> {
             Scene helpScene = new Scene(new HelpPage().getView(stage), 1100, 650);
             stage.setScene(helpScene);
         });
 
-        /**
-         * Returns the user to the login page.
-         */
+
+         // Returns the user to the login page.
         logoutButton.setOnAction(e -> {
             Scene loginScene = new Scene(new LoginPage().getView(stage), 1100, 650);
             stage.setScene(loginScene);
         });
 
-        /**
-         * Returns the user to the Admin Dashboard.
-         */
+         // Returns the user to the Admin Dashboard.
         backButton.setOnAction(e -> {
             Scene dashboardScene = new Scene(new AdminPage().getView(stage), 1100, 650);
             stage.setScene(dashboardScene);
         });
 
-        /**
-         * Sends a POST request to create a new parking lot.
-         */
+
+         // Sends a POST request to create a new parking lot.
+
         addLotButton.setOnAction(e -> {
             try {
                 String validationError = validateLotFieldsForCreateOrUpdate(
@@ -290,9 +287,8 @@ public class AdminEditPage {
             }
         });
 
-        /**
-         * Sends a PUT request to update an existing parking lot.
-         */
+
+        // Sends a PUT request to update an existing parking lot.
         updateLotButton.setOnAction(e -> {
             try {
                 if (idField.getText().trim().isEmpty()) {
@@ -335,9 +331,8 @@ public class AdminEditPage {
             }
         });
 
-        /**
-         * Sends a DELETE request to remove a parking lot by ID.
-         */
+
+         // Sends a DELETE request to remove a parking lot by ID.
         deleteLotButton.setOnAction(e -> {
             try {
                 if (idField.getText().trim().isEmpty()) {
@@ -486,9 +481,9 @@ public class AdminEditPage {
         return "AVAILABLE";
     }
 
-    /**
-     * Clears all form fields after a successful action.
-     */
+
+    // Clears all form fields after a successful action.
+
     private void clearFields(TextField... fields) {
         for (TextField field : fields) {
             field.clear();

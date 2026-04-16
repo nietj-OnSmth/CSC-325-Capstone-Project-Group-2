@@ -152,17 +152,15 @@ public class ParkingLotController {
 
     @PostMapping("/{id}/reserve")
     public ParkingLot reserveSpot(@PathVariable Long id,
-                                  @RequestParam UserRole role) {
-        return service.reserveSpot(id, role);
+                                  @RequestParam UserRole role,
+                                  @RequestParam String username) {
+        return service.reserveSpot(id, role, username);
     }
-    /**
-     * Releases a parking spot in the specified lot.
-     * Example:
-     * POST /api/lots/1/release?role=STUDENT
-     */
+
     @PostMapping("/{id}/release")
     public ParkingLot releaseSpot(@PathVariable Long id,
-                                  @RequestParam UserRole role) {
-        return service.releaseSpot(id, role);
+                                  @RequestParam UserRole role,
+                                  @RequestParam String username) {
+        return service.releaseSpot(id, role, username);
     }
 }

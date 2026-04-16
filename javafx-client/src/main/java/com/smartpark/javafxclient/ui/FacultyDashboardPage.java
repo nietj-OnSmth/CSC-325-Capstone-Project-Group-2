@@ -157,6 +157,8 @@ public class FacultyDashboardPage {
          * Returns the user to the login page.
          */
         logoutButton.setOnAction(e -> {
+            UserSession.clear(); // clears session
+
             Scene loginScene = new Scene(new LoginPage().getView(stage), 1100, 650);
             stage.setScene(loginScene);
         });
@@ -188,6 +190,7 @@ public class FacultyDashboardPage {
         try {
             String response = sendRecommendedLotRequest("FACULTY");
 
+            String lotId = extractJsonValue(response, "id");
             String lotName = extractJsonValue(response, "name");
             String spaces = extractJsonValue(response, "availableSpaces");
             String distance = extractJsonValue(response, "distance");
@@ -195,7 +198,7 @@ public class FacultyDashboardPage {
 
             ParkingResultsPage resultsPage = new ParkingResultsPage();
             Scene resultsScene = new Scene(
-                    resultsPage.getView(stage, lotName, spaces, distance, status, "FACULTY"),
+                    resultsPage.getView(stage, lotId, lotName, spaces, distance, status, "FACULTY"),
                     1100,
                     650
             );

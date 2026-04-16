@@ -132,6 +132,8 @@ public class AdminPage {
         });
 
         logoutButton.setOnAction(e -> {
+            UserSession.clear(); // clears session
+
             Scene loginScene = new Scene(new LoginPage().getView(stage), 1100, 650);
             stage.setScene(loginScene);
         });

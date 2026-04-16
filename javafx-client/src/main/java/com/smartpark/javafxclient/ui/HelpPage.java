@@ -82,9 +82,7 @@ public class HelpPage {
                         "-fx-cursor: hand;"
         );
 
-        /**
-         * Returns the user to the Student Dashboard.
-         */
+         // Returns the user to the Student Dashboard.
         backButton.setOnAction(e -> {
             Scene dashboardScene = new Scene(new StudentDashboardPage().getView(stage), 1100, 650);
             stage.setScene(dashboardScene);
