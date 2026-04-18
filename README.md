@@ -86,17 +86,18 @@ Testing is performed to ensure:
 
 Testing documentation is maintained in: /docs/TESTING.md 
 
-Known Limitations 
+Known Limitations: 
 - Data is currently stored in-memory 
 - Reservations reset on backend restart 
 
-Future Improvements 
+Future Improvements: 
 - Integrate MySQL database for: 
 - Parking lots 
 - Reservations 
 - Improve UI/UX design 
 - Enhance error handling and user feedback 
 - Optional: move authentication to database 
+
 How to Run the Project: 
  
 Backend 
