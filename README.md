@@ -22,7 +22,7 @@ Database (In Progress)
 * MySQL (planned for parking lots and reservations) 
  
 Features 
-Authentication & Role-Based Access 
+Authentication & Role-Based Access: 
 * Login system with role-based routing 
 Roles:
 * Student
@@ -74,7 +74,8 @@ Current Practices:
 Improvements (In Progress):
 * GitHub Kanban Board for task tracking
 * Backlog and sprint organization 
-Testing 
+
+Testing: 
 Testing is performed to ensure: 
 * Login validation
 * Correct role-based routing
