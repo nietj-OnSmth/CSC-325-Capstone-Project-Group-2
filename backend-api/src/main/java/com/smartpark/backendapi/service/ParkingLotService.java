@@ -7,11 +7,14 @@ import org.springframework.stereotype.Service;
 import com.smartpark.backendapi.exception.LotNotFoundException;
 import com.smartpark.backendapi.exception.NoAvailableLotException;
 import com.smartpark.backendapi.exception.AccessDeniedException;
+import com.smartpark.backendapi.repository.ReservationRepository;
+import com.smartpark.backendapi.model.Reservation;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * Service layer responsible for business logic related to parking lots.
@@ -22,6 +25,7 @@ public class ParkingLotService {
 
     private final ParkingLotRepository repository;
     private final RecommendationStrategy recommendationStrategy;
+    private final ReservationRepository reservationRepository;
 
     /**
      * Tracks which lot each user has currently reserved.
@@ -31,9 +35,10 @@ public class ParkingLotService {
     private final Map<String, Long> userReservations = new HashMap<>();
 
     public ParkingLotService(ParkingLotRepository repository,
-                             RecommendationStrategy recommendationStrategy) {
+                             RecommendationStrategy recommendationStrategy, ReservationRepository reservationRepository) {
         this.repository = repository;
         this.recommendationStrategy = recommendationStrategy;
+        this.reservationRepository = reservationRepository;
     }
 
 
@@ -191,32 +196,53 @@ public class ParkingLotService {
      * - the lot must still have space
      * - the user may only hold one reservation at a time
      *
+     * This method:
+     *  * 1. Validates user access to the parking lot
+     *  * 2. Ensures the lot has available space
+     *  * 3. Ensures the user does not already have a reservation
+     *  * 4. Updates the lot availability and status
+     *  * 5. Persists the reservation in the database
+     *
      * @param id the ID of the parking lot
      * @param role the user's role
      * @param username the logged-in username
      * @return the updated ParkingLot after reservation
      */
     public ParkingLot reserveSpot(Long id, UserRole role, String username) {
+
+        // Retrieve the parking lot or throw error if not found
         ParkingLot lot = repository.findById(id)
                 .orElseThrow(() -> new LotNotFoundException(id));
 
+        // Ensure the user is allowed to reserve this lot
         if (lot.getAllowedRole() != role && role != UserRole.ADMIN) {
             throw new AccessDeniedException("You are not allowed to reserve a spot in this lot.");
         }
 
+        // Ensure there are available spaces
         if (lot.getAvailableSpaces() <= 0) {
             throw new NoAvailableLotException("This parking lot is full.");
         }
 
-        if (userReservations.containsKey(username)) {
+        // Enforce one reservation per user
+        if (reservationRepository.existsByUsername(username)) {
             throw new IllegalStateException("You already have a reserved parking spot.");
         }
 
+        // Decrease available spaces
         lot.setAvailableSpaces(lot.getAvailableSpaces() - 1);
-        lot.setStatus(determineLotStatus(lot.getAvailableSpaces(), lot.getCapacity()));
-        userReservations.put(username, id);
 
-        return repository.save(lot);
+        // Update lot status based on new availability
+        lot.setStatus(determineLotStatus(lot.getAvailableSpaces(), lot.getCapacity()));
+
+        // Save updated lot to database
+        repository.save(lot);
+
+        // Create and save reservation record
+        Reservation reservation = new Reservation(username, role, lot);
+        reservationRepository.save(reservation);
+
+        return lot;
     }
 
     /**
@@ -228,37 +254,56 @@ public class ParkingLotService {
      * - the user must already hold a reservation
      * - the reservation must belong to this lot
      *
+     * This method:
+     *  * 1. Validates user access to the parking lot
+     *  * 2. Ensures the user has an active reservation
+     *  * 3. Ensures the reservation matches the selected lot
+     *  * 4. Updates lot availability and status
+     *  * 5. Removes the reservation from the database
+     *
      * @param id the ID of the parking lot
      * @param role the user's role
      * @param username the logged-in username
      * @return the updated ParkingLot after release
      */
     public ParkingLot releaseSpot(Long id, UserRole role, String username) {
+
+        // Retrieve the parking lot or throw error if not found
         ParkingLot lot = repository.findById(id)
                 .orElseThrow(() -> new LotNotFoundException(id));
 
+        // Ensure the user is allowed to release from this lot
         if (lot.getAllowedRole() != role && role != UserRole.ADMIN) {
             throw new AccessDeniedException("You are not allowed to release a spot in this lot.");
         }
 
-        if (!userReservations.containsKey(username)) {
-            throw new IllegalStateException("You do not have a reserved parking spot to release.");
-        }
+        // Retrieve the user's reservation
+        Reservation reservation = reservationRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalStateException("You do not have a reserved parking spot to release."));
 
-        Long reservedLotId = userReservations.get(username);
-        if (!reservedLotId.equals(id)) {
+        // Ensure the reservation corresponds to the selected lot
+        if (!reservation.getParkingLot().getId().equals(id)) {
             throw new IllegalStateException("You can only release the parking spot you reserved.");
         }
 
+        // Prevent exceeding capacity
         if (lot.getAvailableSpaces() >= lot.getCapacity()) {
-            throw new IllegalStateException("This parking lot is already at full available capacity.");
+            throw new IllegalStateException("This parking lot is already at full capacity.");
         }
 
+        // Increase available spaces
         lot.setAvailableSpaces(lot.getAvailableSpaces() + 1);
-        lot.setStatus(determineLotStatus(lot.getAvailableSpaces(), lot.getCapacity()));
-        userReservations.remove(username);
 
-        return repository.save(lot);
+        // Update status
+        lot.setStatus(determineLotStatus(lot.getAvailableSpaces(), lot.getCapacity()));
+
+        // Save updated lot
+        repository.save(lot);
+
+        // Delete reservation from database
+        reservationRepository.delete(reservation);
+
+        return lot;
     }
 
     /**
