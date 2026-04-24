@@ -80,6 +80,7 @@ public class AdminPage {
 
         Label welcome = new Label("Welcome, Admin");
         welcome.setStyle(
+                "-fx-text-fill: white;" +
                 "-fx-font-size: 30px;" +
                         "-fx-font-family: 'Helvetica';" +
                         "-fx-font-weight: bold;"
@@ -87,6 +88,7 @@ public class AdminPage {
 
         Label role = new Label("Logged in as: Admin");
         role.setStyle(
+                "-fx-text-fill: white;" +
                 "-fx-font-size: 16px;" +
                         "-fx-font-family: 'Helvetica';"
         );
