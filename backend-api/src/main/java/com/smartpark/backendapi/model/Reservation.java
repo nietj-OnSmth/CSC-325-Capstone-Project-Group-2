@@ -21,6 +21,7 @@ public class Reservation {
 
 
     // Username of the user who made the reservation
+    @Column(unique = true)
     private String username;
 
 
