@@ -8,6 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -98,15 +101,17 @@ public class StudentDashboardPage {
 
         Label welcome = new Label("Welcome, Student");
         welcome.setStyle(
-                "-fx-font-size: 30px;" +
-                        "-fx-font-family: 'Helvetica';" +
-                        "-fx-font-weight: bold;"
+                "fx-text-fill: white;" +
+                "-fx-font-size: 34px;" +
+                "-fx-font-family: 'Helvetica';" +
+                "-fx-font-weight: bold;"
         );
 
         Label role = new Label("Logged in as: Student");
         role.setStyle(
-                "-fx-font-size: 16px;" +
-                        "-fx-font-family: 'Helvetica';"
+                "fx-text-fill: white;" +
+                "-fx-font-size: 18px;" +
+                "-fx-font-family: 'Helvetica';"
         );
 
         Button findParking = new Button("Find Parking");
@@ -172,8 +177,20 @@ public class StudentDashboardPage {
 
         mainContent.getChildren().addAll(welcome, role, findParking, messageLabel);
 
+        StackPane mainContentWrapper = new StackPane();
+
+        Image image = new Image(getClass().getResource("/ramincar.png").toExternalForm());
+        ImageView imageView = new ImageView(image);
+
+        imageView.setFitWidth(930);
+        imageView.setFitHeight(650);
+        imageView.setPreserveRatio(false);
+        imageView.setOpacity(0.9);
+
+        mainContentWrapper.getChildren().addAll(imageView, mainContent);
+
         root.setLeft(sidebar);
-        root.setCenter(mainContent);
+        root.setCenter(mainContentWrapper);
 
         return root;
     }
