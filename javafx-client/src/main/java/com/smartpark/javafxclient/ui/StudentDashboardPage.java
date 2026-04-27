@@ -101,7 +101,7 @@ public class StudentDashboardPage {
 
         Label welcome = new Label("Welcome, Student");
         welcome.setStyle(
-                "fx-text-fill: white;" +
+                "-fx-text-fill: white;" +
                 "-fx-font-size: 34px;" +
                 "-fx-font-family: 'Helvetica';" +
                 "-fx-font-weight: bold;"
@@ -109,7 +109,7 @@ public class StudentDashboardPage {
 
         Label role = new Label("Logged in as: Student");
         role.setStyle(
-                "fx-text-fill: white;" +
+                "-fx-text-fill: white;" +
                 "-fx-font-size: 18px;" +
                 "-fx-font-family: 'Helvetica';"
         );
