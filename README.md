@@ -59,6 +59,7 @@ Prevents:
  * Releasing without a reservation
  * Fully integrated with MySQL database
  * Reservation data persists across backend restarts
+   
 Restriction:
    * One active reservation per user 
 
@@ -106,6 +107,7 @@ Testing is performed to ensure:
 * Admin CRUD functionality
 * Full-stack functionality
 * Verification of database persistence using Dockerized MySQL.
+  
 Testing documentation is maintained in: docs
 
 Known Limitations: 
@@ -126,6 +128,7 @@ Default credentials:
 * Database: smartpark_db
 * Username: root
 * Password: root
+
 Note: These credentials are for local development only and are not intended for production use. In a production environment, environment variables or secure
 credential storage would be used instead of hardcoded values.
 
