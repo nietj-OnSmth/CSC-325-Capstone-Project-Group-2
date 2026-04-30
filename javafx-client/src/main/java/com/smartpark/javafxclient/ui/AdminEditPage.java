@@ -70,25 +70,17 @@ public class AdminEditPage {
                         "-fx-border-color: transparent;";
 
         Button dashboardButton = new Button("Dashboard");
-        Button aboutButton = new Button("About");
-        Button helpButton = new Button("Help");
         Button logoutButton = new Button("Logout");
 
         dashboardButton.setStyle(sidebarButtonStyle);
-        aboutButton.setStyle(sidebarButtonStyle);
-        helpButton.setStyle(sidebarButtonStyle);
         logoutButton.setStyle(sidebarButtonStyle);
 
         dashboardButton.setMaxWidth(Double.MAX_VALUE);
-        aboutButton.setMaxWidth(Double.MAX_VALUE);
-        helpButton.setMaxWidth(Double.MAX_VALUE);
         logoutButton.setMaxWidth(Double.MAX_VALUE);
 
         sidebar.getChildren().addAll(
                 appTitle,
                 dashboardButton,
-                aboutButton,
-                helpButton,
                 logoutButton
         );
 
@@ -210,33 +202,16 @@ public class AdminEditPage {
                 messageLabel
         );
 
-
         // Reloads the admin dashboard.
-
         dashboardButton.setOnAction(e -> {
             Scene dashboardScene = new Scene(new AdminPage().getView(stage), 1100, 650);
             stage.setScene(dashboardScene);
         });
 
-
-         // Opens the About page.
-
-        aboutButton.setOnAction(e -> {
-            Scene aboutScene = new Scene(new AboutPage().getView(stage), 1100, 650);
-            stage.setScene(aboutScene);
-        });
-
-
-         // Opens the Help page.
-
-        helpButton.setOnAction(e -> {
-            Scene helpScene = new Scene(new HelpPage().getView(stage), 1100, 650);
-            stage.setScene(helpScene);
-        });
-
-
-         // Returns the user to the login page.
+        // Returns the user to the login page and clears the current session.
         logoutButton.setOnAction(e -> {
+            UserSession.clear();
+
             Scene loginScene = new Scene(new LoginPage().getView(stage), 1100, 650);
             stage.setScene(loginScene);
         });
