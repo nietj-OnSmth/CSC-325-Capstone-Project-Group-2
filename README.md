@@ -27,20 +27,26 @@ Frontend
 
 Database
 * MySQL (Dockerized)
-* Persistent storage for parking lots and reservations
+* Persistent storage for
+* Parking lots
+* Reservations
+* User accounts
+
 
 Tools
 * IntelliJ IDEA
 * GitHub
 * Docker
- 
+
 Features:
-Authentication & Role-Based Access: 
-* Login system with role-based routing 
+Authentication & Role-Based Access
+ * Login system with database-backed authentication (MySQL)
+ * Role-based routing after login
 Roles:
 * Student
 * Faculty
 * Admin
+
 
 Student & Faculty Features:
 * Request parking recommendations
@@ -50,15 +56,18 @@ Student & Faculty Features:
   * Distance
   * Status (AVAILABLE / LIMITED / FULL) 
 
-Reservation System:
- * Real-time updates to:
- * Available spaces
- * Lot status
+Reservation System
+* Fully integrated with MySQL database
+Real-time updates to:
+* Available spaces
+* Lot status
 Prevents:
- * Multiple reservations per user
- * Releasing without a reservation
- * Fully integrated with MySQL database
- * Reservation data persists across backend restarts
+* Multiple reservations per user
+* Releasing without an active reservation
+Reservation data persists across:
+* Backend restarts
+* Docker container restarts
+
    
 Restriction:
    * One active reservation per user 
@@ -67,7 +76,16 @@ Admin Features:
 * Add parking lots
 * Update parking lots
 * Delete parking lots
-* View parking lots
+* View all parking lots (Admin View Page)
+* Parking Lot UI
+
+- Parking lots displayed as structured UI cards  
+- Real-time data retrieved from backend API  
+- Status color indicators:
+  - AVAILABLE  
+  - LIMITED  
+  - FULL  
+
 * Manage system availability 
 Recommendation System:
 * Selects optimal lot based on:
@@ -106,18 +124,30 @@ Testing is performed to ensure:
 * Reservation and release constraints
 * Admin CRUD functionality
 * Full-stack functionality
-* Verification of database persistence using Dockerized MySQL.
-  
+* Verification of database persistence and full frontend-backend integration using Dockerized MySQL.
+
 Testing documentation is maintained in: docs
 
-Known Limitations: 
-* User authentication is not yet persisted in the database
-* No user account management system (users are simulated)
+Known Limitations
+* Passwords are stored in plain text (for demonstration purposes)
+* No full authentication framework (e.g., JWT or Spring Security)
+* No user registration system (users are pre-seeded)
 
-Future Improvements:  
-* Persist user authentication in MySQL 
+Future Improvements
+* Implement password hashing
+* Add user registration and account management
+* Integrate Spring Security with JWT authentication
 * Improve UI/UX design
-* Enhance error handling and user feedback
+* Add real-time updates 
+
+
+Docker Integration: 
+SmartPark uses a Dockerized MySQL database to ensure a consistent development environment.
+Benefits:
+* No local database installation required
+* Consistent setup across all team members
+* Persistent data storage
+
 
 Database Configuration (Development Only)
 The project uses a Dockerized MySQL database for development.
