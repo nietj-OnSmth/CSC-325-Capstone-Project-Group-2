@@ -195,7 +195,7 @@ public class FacultyDashboardPage {
         mainContentWrapper.getChildren().addAll(imageView, mainContent);
 
         root.setLeft(sidebar);
-        root.setCenter(mainContent);
+        root.setCenter(mainContentWrapper);
 
         return root;
     }
