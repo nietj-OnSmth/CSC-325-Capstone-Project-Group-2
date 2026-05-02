@@ -98,21 +98,25 @@ public class StudentDashboardPage {
         VBox mainContent = new VBox(20);
         mainContent.setAlignment(Pos.CENTER);
         mainContent.setPadding(new Insets(40));
+        mainContent.setTranslateX(-25);
 
         Label welcome = new Label("Welcome, Student");
         welcome.setStyle(
-                "fx-text-fill: white;" +
-                "-fx-font-size: 34px;" +
-                "-fx-font-family: 'Helvetica';" +
-                "-fx-font-weight: bold;"
+                "-fx-text-fill: white;" +
+                        "-fx-font-size: 34px;" +
+                        "-fx-font-family: 'Helvetica';" +
+                        "-fx-font-weight: bold;"
         );
+        welcome.setTranslateY(-165);
 
         Label role = new Label("Logged in as: Student");
         role.setStyle(
-                "fx-text-fill: white;" +
-                "-fx-font-size: 18px;" +
-                "-fx-font-family: 'Helvetica';"
+                "-fx-text-fill: white;" +
+                        "-fx-font-size: 18px;" +
+                        "-fx-font-family: 'Helvetica';" +
+                        "-fx-font-weight: bold;"
         );
+        role.setTranslateY(-160);
 
         Button findParking = new Button("Find Parking");
         findParking.setStyle(
@@ -124,10 +128,11 @@ public class StudentDashboardPage {
                         "-fx-padding: 12 24;" +
                         "-fx-cursor: hand;"
         );
+        findParking.setTranslateY(95);
 
         Label messageLabel = new Label();
         messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 13px;");
-
+        messageLabel.setTranslateY(105);
         /**
          * Loads the student dashboard again.
          */
