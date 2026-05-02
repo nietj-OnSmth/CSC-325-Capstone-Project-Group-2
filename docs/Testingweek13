@@ -1,0 +1,68 @@
+Week 13 Testing – Frontend Integration & Navigation Fixes
+This document outlines testing performed after implementing the Admin View Parking Page, connecting the JavaFX frontend to the Spring Boot backend, transitioning users to the database, and fixing role-based navigation behavior.
+
+Backend Data Integration (UI)
+
+| Test Case                         | Expected Result                     | Actual Result           | Status |
+|----------------------------------|-------------------------------------|-------------------------|--------|
+| API returns parking lot list     | JSON array returned from backend    | Data returned successfully | PASS   |
+| JavaFX loads parking lots        | Parking lots displayed as UI cards  | Data displayed correctly | PASS   |
+| UI reflects database changes     | Updated data appears correctly      | Changes visible         | PASS   |
+
+
+Admin View Parking Page
+
+| Test Case                         | Expected Result                     | Actual Result           | Status |
+|----------------------------------|-------------------------------------|-------------------------|--------|
+| Navigate to View All Lots        | Page loads successfully             | Page displayed correctly| PASS   |
+| Parking lot cards display correctly | Shows all lot details           | UI renders properly     | PASS   |
+| Status color formatting          | Status reflects availability visually| Colors applied correctly| PASS   |
+| Backend connection from UI       | Data retrieved via REST API         | Connection successful   | PASS   |
+
+
+Admin Dashboard Navigation
+
+| Test Case                         | Expected Result                     | Actual Result           | Status |
+|----------------------------------|-------------------------------------|-------------------------|--------|
+| View All Lots button             | Opens View Parking Page             | Navigation correct      | PASS   |
+| Add/Update/Delete buttons        | Route to Admin Edit Page            | Navigation correct      | PASS   |
+| Dashboard button                 | Reloads Admin Dashboard             | Works correctly         | PASS   |
+
+
+Faculty Navigation Fix
+
+| Test Case                         | Expected Result                     | Actual Result           | Status |
+|----------------------------------|-------------------------------------|-------------------------|--------|
+| Faculty → About → Back           | Returns to Faculty Dashboard        | Correct page loaded     | PASS   |
+| Faculty → Help → Back            | Returns to Faculty Dashboard        | Correct page loaded     | PASS   |
+| No redirect to Student Dashboard | Faculty not misrouted               | Issue resolved          | PASS   |
+
+
+User Authentication (Database-Backed)
+
+| Test Case                         | Expected Result                     | Actual Result           | Status |
+|----------------------------------|-------------------------------------|-------------------------|--------|
+| Login with valid DB user         | User authenticated successfully     | Login successful        | PASS   |
+| Role-based routing after login   | User sent to correct dashboard      | Routing correct         | PASS   |
+| Invalid login attempt            | Access denied                       | Error handled correctly | PASS   |
+
+
+Logout & Session Handling
+
+| Test Case                         | Expected Result                     | Actual Result           | Status |
+|----------------------------------|-------------------------------------|-------------------------|--------|
+| Logout from any page             | User returned to login screen       | Works correctly         | PASS   |
+| Session cleared on logout        | User must log in again              | Session reset           | PASS   |
+| Back navigation after logout     | No access to dashboard              | Access blocked          | PASS   |
+
+
+Issues Found
+·         No critical issues found during frontend integration testing
+·         Minor UI alignment improvements may be considered for final polish
+ 
+Summary
+This testing cycle confirms that the SmartPark frontend is fully integrated with the backend and database.
+·         The Admin View Parking Page successfully retrieves and displays live parking lot data
+·         Navigation issues were resolved, ensuring correct role-based routing
+·         The system provides a consistent, role-aware user experience
+·         Data flow between UI, backend, and database is functioning reliably
