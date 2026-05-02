@@ -1,0 +1,28 @@
+services:
+  smartpark-mysql:
+    image: mysql:8.0
+    container_name: smartpark-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: smartpark_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - smartpark_mysql_data:/var/lib/mysql
+
+  smartpark-phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: smartpark-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: smartpark-mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8081:80"
+    depends_on:
+      - smartpark-mysql
+
+volumes:
+  smartpark_mysql_data:

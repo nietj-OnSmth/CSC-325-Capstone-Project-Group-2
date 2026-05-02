@@ -1,51 +1,41 @@
 package com.smartpark.backendapi.service;
 
-import com.smartpark.backendapi.model.User;
-import com.smartpark.backendapi.model.UserRole;
-import com.smartpark.backendapi.exception.InvalidCredentialsException;
+import com.smartpark.backendapi.dto.LoginRequest;
+import com.smartpark.backendapi.dto.LoginResponse;
+import com.smartpark.backendapi.model.AppUser;
+import com.smartpark.backendapi.repository.AppUserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
- * Service class responsible for handling authentication logic.
- * This acts as a bridge between the controller and the data source.
+ * Handles authentication logic for the SmartPark system.
+ * Replaces in-memory user validation with database-backed validation.
  */
 @Service
 public class AuthService {
 
-    /**
-     * Temporary in-memory list acting as a fake database fitting the scope of this project.
-     * Stores predefined users for testing purposes.
-     */
-    private final List<User> users = List.of(
-            new User("student1", "Studentpass", UserRole.STUDENT),
-            new User("faculty1", "Facultypass", UserRole.FACULTY),
-            new User("admin1", "Adminpass", UserRole.ADMIN)
-    );
+    private final AppUserRepository userRepository;
+
+    // Constructor injection of repository
+    public AuthService(AppUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     /**
      * Validates user login credentials.
-     *
-     * @param username the username provided by the user
-     * @param password the password provided by the user
-     * @return the authenticated User object
-     * @throws InvalidCredentialsException if credentials are incorrect
+     * Checks username and password against database records.
      */
-    public User login(String username, String password) {
+    public LoginResponse login(LoginRequest request) {
 
-        return users.stream()
-                // Check if username matches
-                .filter(user -> user.getUsername().equals(username))
+        // Find user by username
+        AppUser user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("Invalid username or password."));
 
-                // Check if password matches
-                .filter(user -> user.getPassword().equals(password))
+        // Validate password
+        if (!user.getPassword().equals(request.getPassword())) {
+            throw new RuntimeException("Invalid username or password.");
+        }
 
-                // Return first matching user if found
-                .findFirst()
-
-                // Throw exception if no match is found
-                .orElseThrow(() ->
-                        new InvalidCredentialsException("Invalid username or password"));
+        // Return user info and role for frontend routing
+        return new LoginResponse(user.getUsername(), user.getRole());
     }
 }
