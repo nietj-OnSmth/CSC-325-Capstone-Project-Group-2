@@ -95,8 +95,6 @@ public class StudentDashboardPage {
                 logoutButton
         );
 
-        //test
-
         VBox mainContent = new VBox(20);
         mainContent.setAlignment(Pos.CENTER);
         mainContent.setPadding(new Insets(40));
