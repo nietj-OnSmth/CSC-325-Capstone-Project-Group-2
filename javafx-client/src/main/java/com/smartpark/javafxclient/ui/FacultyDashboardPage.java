@@ -108,6 +108,8 @@ public class FacultyDashboardPage {
                         "-fx-font-weight: bold;"
         );
 
+        welcome.setTranslateY(-165);
+
         Label role = new Label("Logged in as: Faculty");
         role.setStyle(
                 "-fx-text-fill: white;" +
