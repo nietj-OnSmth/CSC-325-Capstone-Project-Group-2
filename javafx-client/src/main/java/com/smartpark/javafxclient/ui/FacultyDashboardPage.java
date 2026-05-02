@@ -5,7 +5,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -179,7 +182,17 @@ public class FacultyDashboardPage {
 
         mainContent.getChildren().addAll(welcome, role, findParking, messageLabel);
 
+        StackPane mainContentWrapper = new StackPane();
 
+        Image image = new Image(getClass().getResource("/ramincar.png").toExternalForm());
+        ImageView imageView = new ImageView(image);
+
+        imageView.setFitWidth(930);
+        imageView.setFitHeight(650);
+        imageView.setPreserveRatio(false);
+        imageView.setOpacity(0.9);
+
+        mainContentWrapper.getChildren().addAll(imageView, mainContent);
 
         root.setLeft(sidebar);
         root.setCenter(mainContent);
