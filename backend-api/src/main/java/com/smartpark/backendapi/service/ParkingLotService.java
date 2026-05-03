@@ -12,8 +12,6 @@ import com.smartpark.backendapi.model.Reservation;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -26,13 +24,6 @@ public class ParkingLotService {
     private final ParkingLotRepository repository;
     private final RecommendationStrategy recommendationStrategy;
     private final ReservationRepository reservationRepository;
-
-    /**
-     * Tracks which lot each user has currently reserved.
-     * Key = username
-     * Value = lotId
-     */
-    private final Map<String, Long> userReservations = new HashMap<>();
 
     public ParkingLotService(ParkingLotRepository repository,
                              RecommendationStrategy recommendationStrategy, ReservationRepository reservationRepository) {
@@ -143,17 +134,26 @@ public class ParkingLotService {
     /**
      * Creates a new parking lot in the system.
      *
+     * Before saving, the lot status is calculated on the backend
+     * based on available spaces and capacity. This prevents the frontend
+     * from saving an incorrect status value.
+     *
      * This should only be called by an admin user from the controller layer.
      *
      * @param lot the parking lot to create
-     * @return the saved ParkingLot
+     * @return the saved ParkingLot with calculated status
      */
     public ParkingLot createLot(ParkingLot lot) {
+        lot.setStatus(determineLotStatus(lot.getAvailableSpaces(), lot.getCapacity()));
         return repository.save(lot);
     }
 
     /**
      * Updates an existing parking lot's details.
+     *
+     * The backend recalculates the lot status after updating capacity
+     * and available spaces. This keeps AVAILABLE, LIMITED, and FULL
+     * accurate even if the frontend sends an outdated status value.
      *
      * @param id the ID of the lot to update
      * @param updatedLot the new lot data
@@ -169,7 +169,10 @@ public class ParkingLotService {
         existingLot.setAvailableSpaces(updatedLot.getAvailableSpaces());
         existingLot.setAllowedRole(updatedLot.getAllowedRole());
         existingLot.setDistance(updatedLot.getDistance());
-        existingLot.setStatus(updatedLot.getStatus());
+        existingLot.setStatus(determineLotStatus(
+                existingLot.getAvailableSpaces(),
+                existingLot.getCapacity()
+        ));
 
         return repository.save(existingLot);
     }
