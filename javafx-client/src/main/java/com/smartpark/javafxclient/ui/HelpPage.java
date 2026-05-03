@@ -82,11 +82,19 @@ public class HelpPage {
                         "-fx-cursor: hand;"
         );
 
-         // Returns the user to the Student Dashboard.
+        // Returns the user to the Student/Faculty Dashboard.
         backButton.setOnAction(e -> {
-            Scene dashboardScene = new Scene(new StudentDashboardPage().getView(stage), 1100, 650);
-            stage.setScene(dashboardScene);
+            String role = UserSession.getRole();
+
+            if ("FACULTY".equalsIgnoreCase(role)) {
+                Scene facultyScene = new Scene(new FacultyDashboardPage().getView(stage), 1100, 650);
+                stage.setScene(facultyScene);
+            } else {
+                Scene studentScene = new Scene(new StudentDashboardPage().getView(stage), 1100, 650);
+                stage.setScene(studentScene);
+            }
         });
+
 
         root.getChildren().addAll(title, subtitle, section1, section2, section3, footer, backButton);
 

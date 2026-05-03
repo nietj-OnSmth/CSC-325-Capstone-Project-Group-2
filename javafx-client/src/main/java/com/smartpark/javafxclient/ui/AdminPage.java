@@ -51,25 +51,17 @@ public class AdminPage {
 
 
         Button dashboardButton = new Button("Dashboard");
-        Button aboutButton = new Button("About");
-        Button helpButton = new Button("Help");
         Button logoutButton = new Button("Logout");
 
         dashboardButton.setStyle(sidebarButtonStyle);
-        aboutButton.setStyle(sidebarButtonStyle);
-        helpButton.setStyle(sidebarButtonStyle);
         logoutButton.setStyle(sidebarButtonStyle);
 
         dashboardButton.setMaxWidth(Double.MAX_VALUE);
-        aboutButton.setMaxWidth(Double.MAX_VALUE);
-        helpButton.setMaxWidth(Double.MAX_VALUE);
         logoutButton.setMaxWidth(Double.MAX_VALUE);
 
         sidebar.getChildren().addAll(
                 appTitle,
                 dashboardButton,
-                aboutButton,
-                helpButton,
                 logoutButton
         );
 
@@ -80,14 +72,14 @@ public class AdminPage {
 
         Label welcome = new Label("Welcome, Admin");
         welcome.setStyle(
-                "-fx-font-size: 30px;" +
+                        "-fx-font-size: 30px;" +
                         "-fx-font-family: 'Helvetica';" +
                         "-fx-font-weight: bold;"
         );
 
         Label role = new Label("Logged in as: Admin");
         role.setStyle(
-                "-fx-font-size: 16px;" +
+                        "-fx-font-size: 16px;" +
                         "-fx-font-family: 'Helvetica';"
         );
 
@@ -121,16 +113,6 @@ public class AdminPage {
             stage.setScene(dashboardScene);
         });
 
-        aboutButton.setOnAction(e -> {
-            Scene aboutScene = new Scene(new AboutPage().getView(stage), 1100, 650);
-            stage.setScene(aboutScene);
-        });
-
-        helpButton.setOnAction(e -> {
-            Scene helpScene = new Scene(new HelpPage().getView(stage), 1100, 650);
-            stage.setScene(helpScene);
-        });
-
         logoutButton.setOnAction(e -> {
             UserSession.clear(); // clears session
 
@@ -138,12 +120,11 @@ public class AdminPage {
             stage.setScene(loginScene);
         });
 
-        /**
-         * Opens the admin edit page where all lots can be viewed and managed.
-         */
+
+        // Opens the admin edit page where all lots can be viewed and managed.
         viewAllLots.setOnAction(e -> {
-            Scene adminEditScene = new Scene(new AdminEditPage().getView(stage), 1100, 650);
-            stage.setScene(adminEditScene);
+            Scene viewLotsScene = new Scene(new ViewParkingPages().getView(stage), 1100, 650);
+            stage.setScene(viewLotsScene);
         });
 
         addLot.setOnAction(e -> {

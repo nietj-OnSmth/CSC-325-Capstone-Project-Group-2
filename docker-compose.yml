@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   smartpark-mysql:
     image: mysql:8.0
