@@ -58,12 +58,14 @@ Student & Faculty Features:
 
 Reservation System
 * Fully integrated with MySQL database
+
 Real-time updates to:
 * Available spaces
 * Lot status
 Prevents:
 * Multiple reservations per user
 * Releasing without an active reservation
+  
 Reservation data persists across:
 * Backend restarts
 * Docker container restarts
@@ -77,8 +79,8 @@ Admin Features:
 * Update parking lots
 * Delete parking lots
 * View all parking lots (Admin View Page)
+  
 * Parking Lot UI
-
 - Parking lots displayed as structured UI cards  
 - Real-time data retrieved from backend API  
 - Status color indicators:
