@@ -156,7 +156,9 @@ The project uses a Dockerized MySQL database for development.
 
 Default credentials:
 * Host: localhost
-* Port: 3306
+* Host port: 3307
+* Container MySQL port: 3306
+* Application connects to: localhost:3307
 * Database: smartpark_db
 * Username: root
 * Password: root
