@@ -64,7 +64,7 @@ public class FacultyDashboardPage {
                         "-fx-font-size: 16px;" +
                         "-fx-font-family: 'Helvetica';" +
                         "-fx-alignment: CENTER-LEFT;" +
-                        "-fx-padding: 0;" +
+                        "-fx-padding: 8 12;" +
                         "-fx-cursor: hand;" +
                         "-fx-border-color: transparent;";
 
@@ -79,6 +79,25 @@ public class FacultyDashboardPage {
         aboutButton.setStyle(sidebarButtonStyle);
         helpButton.setStyle(sidebarButtonStyle);
         logoutButton.setStyle(sidebarButtonStyle);
+
+        Button[] sidebarButtons = {
+                dashboardButton,
+                parkingButton,
+                aboutButton,
+                helpButton,
+                logoutButton
+        };
+
+        for (Button button : sidebarButtons) {
+            button.setOnMouseEntered(e -> button.setStyle(
+                    sidebarButtonStyle +
+                            "-fx-background-color: rgba(255,255,255,0.15);" +
+                            "-fx-background-radius: 8;" +
+                            "-fx-padding: 8 12;"
+            ));
+
+            button.setOnMouseExited(e -> button.setStyle(sidebarButtonStyle));
+        }
 
         dashboardButton.setMaxWidth(Double.MAX_VALUE);
         parkingButton.setMaxWidth(Double.MAX_VALUE);
