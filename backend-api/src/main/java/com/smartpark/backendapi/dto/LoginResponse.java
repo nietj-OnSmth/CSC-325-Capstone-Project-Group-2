@@ -14,14 +14,12 @@ public class LoginResponse {
     // Role assigned to the user
     private UserRole role;
 
-    /**
-     * Default constructor
-     */
+
+    // Default constructor
     public LoginResponse() {}
 
-    /**
-     * Parameterized constructor
-     */
+
+    // Parameterized constructor
     public LoginResponse(String username, UserRole role) {
         this.username = username;
         this.role = role;

@@ -135,38 +135,33 @@ public class FacultyDashboardPage {
         messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 13px;");
         messageLabel.setTranslateY(105);
 
-        /**
-         * Reloads the faculty dashboard.
-         */
+
+        // Reloads the faculty dashboard.
         dashboardButton.setOnAction(e -> {
             Scene dashboardScene = new Scene(new FacultyDashboardPage().getView(stage), 1100, 650);
             stage.setScene(dashboardScene);
         });
 
-        /**
-         * Opens the parking recommendation flow from the sidebar.
-         */
+
+        // Opens the parking recommendation flow from the sidebar.
         parkingButton.setOnAction(e -> openRecommendedParking(stage, messageLabel));
 
-        /**
-         * Opens the About page.
-         */
+
+        // Opens the About page.
         aboutButton.setOnAction(e -> {
             Scene aboutScene = new Scene(new AboutPage().getView(stage), 1100, 650);
             stage.setScene(aboutScene);
         });
 
-        /**
-         * Opens the Help page.
-         */
+
+         // Opens the Help page.
         helpButton.setOnAction(e -> {
             Scene helpScene = new Scene(new HelpPage().getView(stage), 1100, 650);
             stage.setScene(helpScene);
         });
 
-        /**
-         * Returns the user to the login page.
-         */
+
+        // Returns the user to the login page.
         logoutButton.setOnAction(e -> {
             UserSession.clear(); // clears session
 
@@ -232,7 +227,6 @@ public class FacultyDashboardPage {
             ex.printStackTrace();
         }
     }
-
     /**
      * Sends a GET request to the backend to retrieve the recommended parking lot.
      *
@@ -266,7 +260,6 @@ public class FacultyDashboardPage {
 
         return response;
     }
-
     /**
      * Extracts a value from a simple JSON string using the provided key.
      *

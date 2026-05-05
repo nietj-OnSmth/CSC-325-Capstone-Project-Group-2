@@ -40,7 +40,6 @@ public class ParkingLotService {
 
 
     //  Returns parking lots available for a specific role.
-
     public List<ParkingLot> getAvailableLotsForRole(UserRole role) {
         return repository.findByAllowedRole(role).stream()
                 .filter(lot -> lot.getAvailableSpaces() > 0)

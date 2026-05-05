@@ -112,7 +112,7 @@ public class ViewParkingPages {
         return root;
     }
 
-    /*
+    /**
      * Retrieves parking lot data from Spring Boot backend.
      *
      * Process:
@@ -175,7 +175,7 @@ public class ViewParkingPages {
                 });
     }
 
-    /*
+    /**
      * Creates a UI "card" for a parking lot.
      *
      * Displays:
@@ -230,7 +230,7 @@ public class ViewParkingPages {
         return card;
     }
 
-    /*
+    /**
      * Returns CSS styling based on parking lot status.
      *
      * Color coding:
