@@ -5,7 +5,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -95,20 +98,26 @@ public class FacultyDashboardPage {
         VBox mainContent = new VBox(20);
         mainContent.setAlignment(Pos.CENTER);
         mainContent.setPadding(new Insets(40));
-        mainContent.setStyle("-fx-background-color: #F5F7F6;");
+        mainContent.setTranslateX(-25);
 
         Label welcome = new Label("Welcome, Faculty");
         welcome.setStyle(
-                "-fx-font-size: 30px;" +
+                "-fx-text-fill: white;" +
+                        "-fx-font-size: 34px;" +
                         "-fx-font-family: 'Helvetica';" +
                         "-fx-font-weight: bold;"
         );
 
+        welcome.setTranslateY(-165);
+
         Label role = new Label("Logged in as: Faculty");
         role.setStyle(
-                "-fx-font-size: 16px;" +
-                        "-fx-font-family: 'Helvetica';"
+                "-fx-text-fill: white;" +
+                        "-fx-font-size: 18px;" +
+                        "-fx-font-family: 'Helvetica';" +
+                        "-fx-font-weight: bold;"
         );
+        role.setTranslateY(-160);
 
         Button findParking = new Button("Find Parking");
         findParking.setStyle(
@@ -120,9 +129,11 @@ public class FacultyDashboardPage {
                         "-fx-padding: 12 24;" +
                         "-fx-cursor: hand;"
         );
+        findParking.setTranslateY(95);
 
         Label messageLabel = new Label();
         messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 13px;");
+        messageLabel.setTranslateY(105);
 
 
         // Reloads the faculty dashboard.
@@ -168,8 +179,20 @@ public class FacultyDashboardPage {
 
         mainContent.getChildren().addAll(welcome, role, findParking, messageLabel);
 
+        StackPane mainContentWrapper = new StackPane();
+
+        Image image = new Image(getClass().getResource("/ramincar.png").toExternalForm());
+        ImageView imageView = new ImageView(image);
+
+        imageView.setFitWidth(930);
+        imageView.setFitHeight(650);
+        imageView.setPreserveRatio(false);
+        imageView.setOpacity(0.9);
+
+        mainContentWrapper.getChildren().addAll(imageView, mainContent);
+
         root.setLeft(sidebar);
-        root.setCenter(mainContent);
+        root.setCenter(mainContentWrapper);
 
         return root;
     }

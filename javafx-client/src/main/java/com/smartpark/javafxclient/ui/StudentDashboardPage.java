@@ -98,21 +98,25 @@ public class StudentDashboardPage {
         VBox mainContent = new VBox(20);
         mainContent.setAlignment(Pos.CENTER);
         mainContent.setPadding(new Insets(40));
+        mainContent.setTranslateX(-25);
 
         Label welcome = new Label("Welcome, Student");
         welcome.setStyle(
                 "-fx-text-fill: white;" +
-                "-fx-font-size: 34px;" +
-                "-fx-font-family: 'Helvetica';" +
-                "-fx-font-weight: bold;"
+                        "-fx-font-size: 34px;" +
+                        "-fx-font-family: 'Helvetica';" +
+                        "-fx-font-weight: bold;"
         );
+        welcome.setTranslateY(-165);
 
         Label role = new Label("Logged in as: Student");
         role.setStyle(
                 "-fx-text-fill: white;" +
-                "-fx-font-size: 18px;" +
-                "-fx-font-family: 'Helvetica';"
+                        "-fx-font-size: 18px;" +
+                        "-fx-font-family: 'Helvetica';" +
+                        "-fx-font-weight: bold;"
         );
+        role.setTranslateY(-160);
 
         Button findParking = new Button("Find Parking");
         findParking.setStyle(
@@ -124,32 +128,43 @@ public class StudentDashboardPage {
                         "-fx-padding: 12 24;" +
                         "-fx-cursor: hand;"
         );
+        findParking.setTranslateY(95);
 
         Label messageLabel = new Label();
         messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 13px;");
-
-        // Loads the student dashboard again.
+        messageLabel.setTranslateY(105);
+        /**
+         * Loads the student dashboard again.
+         */
         dashboardButton.setOnAction(e -> {
             Scene dashboardScene = new Scene(new StudentDashboardPage().getView(stage), 1100, 650);
             stage.setScene(dashboardScene);
         });
 
-        // Opens the parking recommendation flow from the sidebar.
+        /**
+         * Opens the parking recommendation flow from the sidebar.
+         */
         parkingButton.setOnAction(e -> openRecommendedParking(stage, messageLabel));
 
-        // Opens the About page.
+        /**
+         * Opens the About page.
+         */
         aboutButton.setOnAction(e -> {
             Scene aboutScene = new Scene(new AboutPage().getView(stage), 1100, 650);
             stage.setScene(aboutScene);
         });
 
-        // Opens the Help page.
+        /**
+         * Opens the Help page.
+         */
         helpButton.setOnAction(e -> {
             Scene helpScene = new Scene(new HelpPage().getView(stage), 1100, 650);
             stage.setScene(helpScene);
         });
 
-        // Returns the user to the login page.
+        /**
+         * Returns the user to the login page.
+         */
         logoutButton.setOnAction(e -> {
             UserSession.clear(); // clears session
 

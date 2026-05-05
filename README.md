@@ -58,12 +58,14 @@ Student & Faculty Features:
 
 Reservation System
 * Fully integrated with MySQL database
+
 Real-time updates to:
 * Available spaces
 * Lot status
 Prevents:
 * Multiple reservations per user
 * Releasing without an active reservation
+  
 Reservation data persists across:
 * Backend restarts
 * Docker container restarts
@@ -77,8 +79,8 @@ Admin Features:
 * Update parking lots
 * Delete parking lots
 * View all parking lots (Admin View Page)
+  
 * Parking Lot UI
-
 - Parking lots displayed as structured UI cards  
 - Real-time data retrieved from backend API  
 - Status color indicators:
@@ -154,7 +156,9 @@ The project uses a Dockerized MySQL database for development.
 
 Default credentials:
 * Host: localhost
-* Port: 3306
+* Host port: 3307
+* Container MySQL port: 3306
+* Application connects to: localhost:3307
 * Database: smartpark_db
 * Username: root
 * Password: root
