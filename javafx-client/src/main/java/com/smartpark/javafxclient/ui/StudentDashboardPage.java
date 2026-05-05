@@ -121,7 +121,7 @@ public class StudentDashboardPage {
         Label welcome = new Label("Welcome, Student");
         welcome.setStyle(
                 "-fx-text-fill: white;" +
-                        "-fx-font-size: 34px;" +
+                        "-fx-font-size: 50px;" +
                         "-fx-font-family: 'Segoe UI';" +
                         "-fx-font-weight: bold;" +
                         "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 12, 0, 0, 2);"
@@ -131,7 +131,7 @@ public class StudentDashboardPage {
         Label role = new Label("Logged in as: Student");
         role.setStyle(
                 "-fx-text-fill: white;" +
-                        "-fx-font-size: 18px;" +
+                        "-fx-font-size: 24px;" +
                         "-fx-font-family: 'Segoe UI';" +
                         "-fx-font-weight: bold;" +
                         "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 12, 0, 0, 2);"
@@ -142,11 +142,12 @@ public class StudentDashboardPage {
         findParking.setStyle(
                 "-fx-background-color: #0B5E3C;" +
                         "-fx-text-fill: white;" +
-                        "-fx-font-size: 16px;" +
+                        "-fx-font-size: 18px;" +
                         "-fx-font-family: 'Segoe UI';" +
                         "-fx-font-weight: bold;" +
-                        "-fx-background-radius: 10;" +
+                        "-fx-background-radius: 14;" +
                         "-fx-padding: 12 24;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 12, 0, 0, 2);" +
                         "-fx-cursor: hand;"
         );
         findParking.setTranslateY(95);
