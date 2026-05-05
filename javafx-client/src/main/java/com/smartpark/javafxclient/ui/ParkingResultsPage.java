@@ -70,7 +70,7 @@ public class ParkingResultsPage {
         Label lotIdLabel = new Label("Lot ID: " + lotId);
         Label bestLot = new Label("Best Lot: " + lotName);
         Label spacesLabel = new Label("Open Spaces: " + spaces);
-        Label distanceLabel = new Label("Distance: " + distance);
+        Label distanceLabel = new Label("Distance in meters: " + distance);
         Label statusLabel = new Label("Status: " + status);
         Label messageLabel = new Label();
 
@@ -138,9 +138,8 @@ public class ParkingResultsPage {
             }
         });
 
-        /**
-         * Releases a reserved parking spot and reloads updated lot info.
-         */
+
+        // Releases a reserved parking spot and reloads updated lot info.
         releaseButton.setOnAction(e -> {
             try {
                 String response = sendReleaseRequest(lotId, role);
@@ -168,8 +167,7 @@ public class ParkingResultsPage {
             }
         });
 
-
-         // Returns the user to the correct dashboard based on role.
+        // Returns the user to the correct dashboard based on role.
         backButton.setOnAction(e -> {
             Scene dashboardScene;
 
@@ -286,7 +284,6 @@ public class ParkingResultsPage {
 
         return response;
     }
-
     /**
      * Extracts a value from a JSON string using the given key.
      * Supports both string and numeric values.

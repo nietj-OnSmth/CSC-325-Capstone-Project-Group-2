@@ -222,9 +222,7 @@ public class AdminEditPage {
             stage.setScene(dashboardScene);
         });
 
-
          // Sends a POST request to create a new parking lot.
-
         addLotButton.setOnAction(e -> {
             try {
                 String validationError = validateLotFieldsForCreateOrUpdate(
@@ -245,7 +243,7 @@ public class AdminEditPage {
                         + "\"allowedRole\":\"" + roleField.getText().trim().toUpperCase() + "\","
                         + "\"capacity\":" + capacity + ","
                         + "\"availableSpaces\":" + spaces + ","
-                        + "\"distance\":" + distance + ","
+                        + "\"distance in meters\":" + distance + ","
                         + "\"status\":\"" + status + "\""
                         + "}";
 

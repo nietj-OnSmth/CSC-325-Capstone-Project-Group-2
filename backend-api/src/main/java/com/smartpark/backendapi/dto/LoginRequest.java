@@ -12,14 +12,12 @@ public class LoginRequest {
     // Password entered by the user
     private String password;
 
-    /**
-     * Default constructor
-     */
+
+    // Default constructor
     public LoginRequest() {}
 
-    /**
-     * Parameterized constructor
-     */
+
+    // Parameterized constructor
     public LoginRequest(String username, String password) {
         this.username = username;
         this.password = password;

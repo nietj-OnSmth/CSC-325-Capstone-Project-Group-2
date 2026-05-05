@@ -36,7 +36,7 @@ public class ParkingLot {
     // Distance from the user's destination (used for recommendations)
     private double distance;
 
-    // Status of the lot (AVAILABLE or FULL)
+    // Status of the lot (AVAILABLE/LIMITED/FULL)
     private String status;
 
     /**

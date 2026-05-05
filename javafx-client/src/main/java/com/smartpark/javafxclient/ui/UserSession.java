@@ -8,11 +8,13 @@ package com.smartpark.javafxclient.ui;
  * the authenticated user's username and role without repeatedly calling
  * the backend.
  *
- * Since this project uses an in-memory authentication system (no database),
- * this class simulates session persistence on the frontend.
+ * The backend now validates users through the MySQL database, but the
+ * frontend still needs to temporarily store session information while
+ * the application is running.
  *
  * NOTE:
- * - Real Mysql database implementation will be worked on as the project goes foward
+ * - This is a lightweight frontend session approach for the capstone project.
+ * - A real production system would use a more secure session or token-based system.
  */
 public class UserSession {
     private static String username;

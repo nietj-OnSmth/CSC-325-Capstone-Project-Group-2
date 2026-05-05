@@ -10,10 +10,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Loads sample parking lot data when the application starts.
+ * Loads initial sample data when the application starts.
  *
- * This allows the backend to immediately return data
- * without needing manual database input.
+ * This allows the backend to immediately return demo data
+ * without requiring manual database input.
+ *
+ * Data is only inserted if the related table is empty,
+ * so existing persistent database records are not overwritten.
  */
 @Configuration
 public class DataLoader {
@@ -30,7 +33,7 @@ public class DataLoader {
                 repo.save(new ParkingLot("Lot A", UserRole.STUDENT, 100, 24, 150.0, "AVAILABLE"));
                 repo.save(new ParkingLot("Lot B", UserRole.STUDENT, 90, 0, 220.0, "FULL"));
                 repo.save(new ParkingLot("Lot C", UserRole.FACULTY, 60, 18, 100.0, "AVAILABLE"));
-                repo.save(new ParkingLot("Lot D", UserRole.FACULTY, 75, 5, 180.0, "AVAILABLE"));
+                repo.save(new ParkingLot("Lot D", UserRole.FACULTY, 75, 5, 180.0, "Limited"));
             }
 
             // Load default users if table is empty
