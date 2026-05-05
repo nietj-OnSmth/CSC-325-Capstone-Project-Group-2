@@ -122,7 +122,7 @@ public class StudentDashboardPage {
         welcome.setStyle(
                 "-fx-text-fill: white;" +
                         "-fx-font-size: 34px;" +
-                        "-fx-font-family: 'Helvetica';" +
+                        "-fx-font-family: 'Segoe UI';" +
                         "-fx-font-weight: bold;"
         );
         welcome.setTranslateY(-165);
@@ -131,7 +131,7 @@ public class StudentDashboardPage {
         role.setStyle(
                 "-fx-text-fill: white;" +
                         "-fx-font-size: 18px;" +
-                        "-fx-font-family: 'Helvetica';" +
+                        "-fx-font-family: 'Segoe UI';" +
                         "-fx-font-weight: bold;"
         );
         role.setTranslateY(-160);
@@ -141,6 +141,7 @@ public class StudentDashboardPage {
                 "-fx-background-color: #0B5E3C;" +
                         "-fx-text-fill: white;" +
                         "-fx-font-size: 16px;" +
+                        "-fx-font-family: 'Segoe UI';" +
                         "-fx-font-weight: bold;" +
                         "-fx-background-radius: 10;" +
                         "-fx-padding: 12 24;" +
