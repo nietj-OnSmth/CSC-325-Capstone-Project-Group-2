@@ -123,7 +123,8 @@ public class StudentDashboardPage {
                 "-fx-text-fill: white;" +
                         "-fx-font-size: 34px;" +
                         "-fx-font-family: 'Segoe UI';" +
-                        "-fx-font-weight: bold;"
+                        "-fx-font-weight: bold;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 12, 0, 0, 2);"
         );
         welcome.setTranslateY(-165);
 
@@ -132,7 +133,8 @@ public class StudentDashboardPage {
                 "-fx-text-fill: white;" +
                         "-fx-font-size: 18px;" +
                         "-fx-font-family: 'Segoe UI';" +
-                        "-fx-font-weight: bold;"
+                        "-fx-font-weight: bold;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 12, 0, 0, 2);"
         );
         role.setTranslateY(-160);
 
