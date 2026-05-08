@@ -167,6 +167,8 @@ Note: These credentials are for local development only and are not intended for 
 credential storage would be used instead of hardcoded values.
 
 How to Run the Project: 
+
+IMPORTANT: Docker desktop must be installed to run the project.
  
 Backend
 1. Ensure Docker is running:
