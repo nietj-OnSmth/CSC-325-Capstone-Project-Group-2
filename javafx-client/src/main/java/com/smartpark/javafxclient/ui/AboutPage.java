@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.layout.BorderPane;
 
 /**
  * AboutPage displays background information about the SmartPark system.
@@ -22,11 +23,82 @@ public class AboutPage {
      * @param stage the primary JavaFX stage used for navigation
      * @return VBox layout containing the About page content
      */
-    public VBox getView(Stage stage) {
-        VBox root = new VBox(20);
-        root.setPadding(new Insets(40));
-        root.setAlignment(Pos.TOP_CENTER);
-        root.setStyle("-fx-background-color: #F5F7F6;");
+    public BorderPane getView(Stage stage) {
+        BorderPane root = new BorderPane();
+
+        VBox sidebar = new VBox(25);
+        sidebar.setPadding(new Insets(25));
+        sidebar.setPrefWidth(200);
+        sidebar.setStyle("-fx-background-color: #0B5E3C;");
+
+        Label appTitle = new Label("SmartPark");
+        appTitle.setStyle(
+                "-fx-text-fill: white;" +
+                        "-fx-font-size: 22px;" +
+                        "-fx-font-family: 'Helvetica';" +
+                        "-fx-font-weight: bold;"
+        );
+
+        String sidebarButtonStyle =
+                "-fx-background-color: transparent;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 16px;" +
+                        "-fx-font-family: 'Helvetica';" +
+                        "-fx-alignment: CENTER-LEFT;" +
+                        "-fx-padding: 8 12;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-border-color: transparent;";
+
+        Button dashboardButton = new Button("Dashboard");
+        Button parkingButton = new Button("Parking");
+        Button aboutButton = new Button("About");
+        Button helpButton = new Button("Help");
+        Button logoutButton = new Button("Logout");
+
+        dashboardButton.setStyle(sidebarButtonStyle);
+        parkingButton.setStyle(sidebarButtonStyle);
+        aboutButton.setStyle(sidebarButtonStyle);
+        helpButton.setStyle(sidebarButtonStyle);
+        logoutButton.setStyle(sidebarButtonStyle);
+
+        Button[] sidebarButtons = {
+                dashboardButton,
+                parkingButton,
+                aboutButton,
+                helpButton,
+                logoutButton
+        };
+
+        for (Button button : sidebarButtons) {
+            button.setOnMouseEntered(e -> button.setStyle(
+                    sidebarButtonStyle +
+                            "-fx-background-color: rgba(255,255,255,0.15);" +
+                            "-fx-background-radius: 8;" +
+                            "-fx-padding: 8 12;"
+            ));
+
+            button.setOnMouseExited(e -> button.setStyle(sidebarButtonStyle));
+        }
+
+        dashboardButton.setMaxWidth(Double.MAX_VALUE);
+        parkingButton.setMaxWidth(Double.MAX_VALUE);
+        aboutButton.setMaxWidth(Double.MAX_VALUE);
+        helpButton.setMaxWidth(Double.MAX_VALUE);
+        logoutButton.setMaxWidth(Double.MAX_VALUE);
+
+        sidebar.getChildren().addAll(
+                appTitle,
+                dashboardButton,
+                parkingButton,
+                aboutButton,
+                helpButton,
+                logoutButton
+        );
+
+        VBox content = new VBox(20);
+        content.setPadding(new Insets(40));
+        content.setAlignment(Pos.TOP_CENTER);
+        content.setStyle("-fx-background-color: #F5F7F6;");
 
         Label title = new Label("About SmartPark");
         title.setStyle(
@@ -91,7 +163,10 @@ public class AboutPage {
 
         contentBox.getChildren().addAll(paragraph1);
 
-        root.getChildren().addAll(title, subtitle, contentBox, backButton);
+        content.getChildren().addAll(title, subtitle, contentBox, backButton);
+
+        root.setLeft(sidebar);
+        root.setCenter(content);
 
         return root;
     }

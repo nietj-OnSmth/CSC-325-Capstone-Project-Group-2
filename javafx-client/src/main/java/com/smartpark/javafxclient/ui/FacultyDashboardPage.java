@@ -64,7 +64,7 @@ public class FacultyDashboardPage {
                         "-fx-font-size: 16px;" +
                         "-fx-font-family: 'Helvetica';" +
                         "-fx-alignment: CENTER-LEFT;" +
-                        "-fx-padding: 0;" +
+                        "-fx-padding: 8 12;" +
                         "-fx-cursor: hand;" +
                         "-fx-border-color: transparent;";
 
@@ -79,6 +79,25 @@ public class FacultyDashboardPage {
         aboutButton.setStyle(sidebarButtonStyle);
         helpButton.setStyle(sidebarButtonStyle);
         logoutButton.setStyle(sidebarButtonStyle);
+
+        Button[] sidebarButtons = {
+                dashboardButton,
+                parkingButton,
+                aboutButton,
+                helpButton,
+                logoutButton
+        };
+
+        for (Button button : sidebarButtons) {
+            button.setOnMouseEntered(e -> button.setStyle(
+                    sidebarButtonStyle +
+                            "-fx-background-color: rgba(255,255,255,0.15);" +
+                            "-fx-background-radius: 8;" +
+                            "-fx-padding: 8 12;"
+            ));
+
+            button.setOnMouseExited(e -> button.setStyle(sidebarButtonStyle));
+        }
 
         dashboardButton.setMaxWidth(Double.MAX_VALUE);
         parkingButton.setMaxWidth(Double.MAX_VALUE);
@@ -103,9 +122,10 @@ public class FacultyDashboardPage {
         Label welcome = new Label("Welcome, Faculty");
         welcome.setStyle(
                 "-fx-text-fill: white;" +
-                        "-fx-font-size: 34px;" +
-                        "-fx-font-family: 'Helvetica';" +
-                        "-fx-font-weight: bold;"
+                        "-fx-font-size: 50px;" +
+                        "-fx-font-family: 'Segoe UI';" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 12, 0, 0, 2);"
         );
 
         welcome.setTranslateY(-165);
@@ -113,9 +133,10 @@ public class FacultyDashboardPage {
         Label role = new Label("Logged in as: Faculty");
         role.setStyle(
                 "-fx-text-fill: white;" +
-                        "-fx-font-size: 18px;" +
-                        "-fx-font-family: 'Helvetica';" +
-                        "-fx-font-weight: bold;"
+                        "-fx-font-size: 24px;" +
+                        "-fx-font-family: 'Seqoe UI';" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 12, 0, 0, 2);"
         );
         role.setTranslateY(-160);
 
@@ -123,10 +144,11 @@ public class FacultyDashboardPage {
         findParking.setStyle(
                 "-fx-background-color: #0B5E3C;" +
                         "-fx-text-fill: white;" +
-                        "-fx-font-size: 16px;" +
+                        "-fx-font-size: 24px;" +
                         "-fx-font-weight: bold;" +
-                        "-fx-background-radius: 10;" +
-                        "-fx-padding: 12 24;" +
+                        "-fx-background-radius: 14;" +
+                        "-fx-padding: 16 32;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 12, 0, 0, 2);" +
                         "-fx-cursor: hand;"
         );
         findParking.setTranslateY(95);
