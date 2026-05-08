@@ -108,11 +108,13 @@ public class AdminPage {
         updateLot.setPrefWidth(220);
         deleteLot.setPrefWidth(220);
 
+        // Returns Admin to Admin dashboard
         dashboardButton.setOnAction(e -> {
             Scene dashboardScene = new Scene(new AdminPage().getView(stage), 1100, 650);
             stage.setScene(dashboardScene);
         });
 
+        // Logs out Admin and returns to login page
         logoutButton.setOnAction(e -> {
             UserSession.clear(); // clears session
 
@@ -127,16 +129,19 @@ public class AdminPage {
             stage.setScene(viewLotsScene);
         });
 
+        // Opens up form page to add a parking lot to the database.
         addLot.setOnAction(e -> {
             Scene adminEditScene = new Scene(new AdminEditPage().getView(stage), 1100, 650);
             stage.setScene(adminEditScene);
         });
 
+        // Opens up form page to update a parking lot to the database.
         updateLot.setOnAction(e -> {
             Scene adminEditScene = new Scene(new AdminEditPage().getView(stage), 1100, 650);
             stage.setScene(adminEditScene);
         });
 
+        // Opens up form page to delete a parking lot to the database.
         deleteLot.setOnAction(e -> {
             Scene adminEditScene = new Scene(new AdminEditPage().getView(stage), 1100, 650);
             stage.setScene(adminEditScene);

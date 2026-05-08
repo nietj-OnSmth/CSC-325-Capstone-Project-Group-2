@@ -456,7 +456,6 @@ public class AdminEditPage {
 
 
     // Clears all form fields after a successful action.
-
     private void clearFields(TextField... fields) {
         for (TextField field : fields) {
             field.clear();
