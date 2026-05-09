@@ -145,6 +145,7 @@ Future Improvements
 
 Docker Integration: 
 SmartPark uses a Dockerized MySQL database to ensure a consistent development environment.
+
 Benefits:
 * No local database installation required
 * Consistent setup across all team members
