@@ -1,0 +1,121 @@
+Week 14 Testing – Final System Validation
+This document outlines final testing performed on the SmartPark system before the final presentation. The goal of this testing cycle was to validate all major features, confirm full-stack functionality, and ensure the system is stable for demonstration.
+
+Final System Testing
+
+System Startup & Environment
+
+| Test Case                         | Expected Result                     | Actual Result                | Status |
+|----------------------------------|-------------------------------------|------------------------------|--------|
+| Start Docker MySQL container     | Database container starts successfully | Container started correctly | PASS   |
+| Start Spring Boot backend        | Backend connects to MySQL           | Backend started successfully | PASS   |
+| Start JavaFX frontend            | Application launches correctly      | Frontend opened successfully | PASS   |
+| Database persistence after restart | Existing data remains available   | Data persisted correctly     | PASS   |
+
+---
+
+User Authentication
+
+| Test Case                         | Expected Result                     | Actual Result                     | Status |
+|----------------------------------|-------------------------------------|-----------------------------------|--------|
+| Login with valid student user    | Redirect to student dashboard       | Student dashboard loaded          | PASS   |
+| Login with valid faculty user    | Redirect to faculty dashboard       | Faculty dashboard loaded          | PASS   |
+| Login with valid admin user      | Redirect to admin dashboard         | Admin dashboard loaded            | PASS   |
+| Invalid login attempt            | Error message displayed             | Error handled correctly           | PASS   |
+| User accounts stored in MySQL    | Users persist in database           | User records remained after restart | PASS |
+
+---
+
+Role-Based Navigation
+
+| Test Case                                | Expected Result                  | Actual Result              | Status |
+|------------------------------------------|----------------------------------|----------------------------|--------|
+| Student dashboard navigation             | Student pages load correctly     | Navigation worked correctly| PASS   |
+| Faculty dashboard navigation             | Faculty pages load correctly     | Navigation worked correctly| PASS   |
+| Admin dashboard navigation               | Admin pages load correctly       | Navigation worked correctly| PASS   |
+| Student/Faculty About page back button   | Returns to correct dashboard     | Correct dashboard loaded   | PASS   |
+| Student/Faculty Help page back button    | Returns to correct dashboard     | Correct dashboard loaded   | PASS   |
+| Logout                                   | User returned to login page      | Logout worked correctly    | PASS   |
+
+---
+
+Parking Recommendation System
+
+| Test Case                                 | Expected Result                    | Actual Result            | Status |
+|-------------------------------------------|------------------------------------|--------------------------|--------|
+| Student requests recommendation           | Student lot recommended            | Recommendation returned  | PASS   |
+| Faculty requests recommendation           | Faculty lot recommended            | Recommendation returned  | PASS   |
+| Full lots excluded                        | Full lots not recommended          | Full lots excluded       | PASS   |
+| Best lot selected by availability/distance| Most appropriate lot returned      | Correct lot selected     | PASS   |
+| No available lots                         | Error message displayed            | Error handled correctly  | PASS   |
+
+---
+
+Reservation System
+
+| Test Case                         | Expected Result                     | Actual Result               | Status |
+|----------------------------------|-------------------------------------|-----------------------------|--------|
+| Reserve available spot           | Reservation created                 | Reservation successful      | PASS   |
+| Reservation stored in MySQL      | Reservation row appears in database | Record created correctly    | PASS   |
+| Available spaces decrease        | Lot availability decreases by 1     | Availability updated        | PASS   |
+| Lot status recalculates          | Status updates based on availability| Status updated correctly    | PASS   |
+| Prevent duplicate reservation    | User cannot reserve twice           | Restriction enforced        | PASS   |
+| Reserve full lot                 | Reservation blocked                 | Error handled correctly     | PASS   |
+
+---
+
+Release System
+
+| Test Case                         | Expected Result                     | Actual Result            | Status |
+|----------------------------------|-------------------------------------|--------------------------|--------|
+| Release active reservation       | Reservation removed                 | Release successful       | PASS   |
+| Reservation removed from MySQL   | Reservation row deleted             | Record deleted correctly | PASS   |
+| Available spaces increase        | Lot availability increases by 1     | Availability updated     | PASS   |
+| Release without reservation      | Release blocked                     | Restriction enforced     | PASS   |
+| Release wrong lot                | Release blocked                     | Restriction enforced     | PASS   |
+
+---
+
+Admin Parking Lot Management
+
+| Test Case                              | Expected Result                            | Actual Result                | Status |
+|----------------------------------------|--------------------------------------------|------------------------------|--------|
+| View all parking lots                  | Admin can see all lots                     | Lots displayed correctly     | PASS   |
+| Add parking lot                        | New lot saved to database                  | Lot added successfully       | PASS   |
+| Update parking lot                     | Changes saved to database                  | Lot updated successfully     | PASS   |
+| Delete parking lot                     | Lot removed from database                  | Lot deleted successfully     | PASS   |
+| Status recalculates on create/update   | Correct AVAILABLE/LIMITED/FULL status shown| Status calculated correctly  | PASS   |
+
+---
+
+Frontend-Backend Integration
+
+| Test Case                         | Expected Result                | Actual Result               | Status |
+|----------------------------------|--------------------------------|-----------------------------|--------|
+| Frontend sends login request     | Backend validates user         | Login request worked correctly | PASS |
+| Frontend retrieves parking recommendation | Backend returns lot data | Data returned correctly     | PASS   |
+| Frontend reserves spot           | Backend updates DB             | Reservation persisted       | PASS   |
+| Frontend releases spot           | Backend updates DB             | Release persisted           | PASS   |
+| Admin UI retrieves all lots      | Backend returns database data  | Lot cards displayed correctly | PASS |
+
+---
+
+UI Consistency & Usability
+
+| Test Case                         | Expected Result                  | Actual Result               | Status |
+|----------------------------------|----------------------------------|-----------------------------|--------|
+| Sidebar buttons work correctly   | Pages navigate as expected       | Navigation successful       | PASS   |
+| Parking lot cards display data clearly | Lot info readable to user | Cards displayed correctly   | PASS   |
+| Distance units shown             | Distance displayed with units    | Distance shown in meters    | PASS   |
+| Status labels display correctly  | AVAILABLE/LIMITED/FULL shown     | Status displayed correctly  | PASS   |
+| UI styling consistent            | Pages follow same visual theme   | Styling consistent          | PASS   |
+
+Issues Found
+
+No critical issues found during final system testing
+Minor UI polish may still be adjusted before the final presentation
+
+Summary
+
+Final system testing confirms that SmartPark is functioning as a complete full-stack application. The system supports database-backed login, role-based routing, parking recommendations, reservation and release functionality, admin parking lot management, and persistent MySQL storage through Docker.
+All major features were tested successfully and are ready for the final project demonstration.

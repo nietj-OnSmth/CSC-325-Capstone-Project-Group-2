@@ -73,14 +73,14 @@ public class AdminPage {
         Label welcome = new Label("Welcome, Admin");
         welcome.setStyle(
                         "-fx-font-size: 30px;" +
-                        "-fx-font-family: 'Helvetica';" +
+                        "-fx-font-family: 'Segoe UI';" +
                         "-fx-font-weight: bold;"
         );
 
         Label role = new Label("Logged in as: Admin");
         role.setStyle(
                         "-fx-font-size: 16px;" +
-                        "-fx-font-family: 'Helvetica';"
+                        "-fx-font-family: 'Segoe UI';"
         );
 
         Button viewAllLots = new Button("View All Lots");
@@ -147,7 +147,19 @@ public class AdminPage {
             stage.setScene(adminEditScene);
         });
 
-        mainContent.getChildren().addAll(
+        VBox adminCard = new VBox(20);
+        adminCard.setAlignment(Pos.CENTER);
+        adminCard.setPadding(new Insets(30));
+        adminCard.setMaxWidth(500);
+
+        adminCard.setStyle(
+                "-fx-background-color: white;" +
+                        "-fx-background-radius: 16;" +
+                        "-fx-border-color: #D9E2DD;" +
+                        "-fx-border-radius: 16;"
+        );
+
+        adminCard.getChildren().addAll(
                 welcome,
                 role,
                 viewAllLots,
@@ -155,6 +167,8 @@ public class AdminPage {
                 updateLot,
                 deleteLot
         );
+
+        mainContent.getChildren().add(adminCard);
 
         root.setLeft(sidebar);
         root.setCenter(mainContent);
