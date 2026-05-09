@@ -169,7 +169,8 @@ public class ParkingResultsPage {
                         "-fx-font-family: 'Helvetica';" +
                         "-fx-font-weight: bold;" +
                         "-fx-background-radius: 10;" +
-                        "-fx-padding: 12 24;";
+                        "-fx-padding: 12 24;" +
+                        "-fx-cursor: hand";
 
         reserveButton.setStyle(buttonStyle);
         backButton.setStyle(buttonStyle);
@@ -239,8 +240,37 @@ public class ParkingResultsPage {
             }
         });
 
-        // Returns the user to the correct dashboard based on role.
-        backButton.setOnAction(e -> {
+            // Sends the user back to the correct role-based dashboard.
+            dashboardButton.setOnAction(e -> navigateToDashboard(stage));
+
+            /**
+             * For student/faculty users, Parking returns them to their dashboard.
+             * From there, they can request a recommendation using the dashboard button.
+             * */
+            parkingButton.setOnAction(e -> navigateToDashboard(stage));
+
+            // Reloads the About page.
+            aboutButton.setOnAction(e -> {
+                Scene aboutScene = new Scene(new AboutPage().getView(stage), 1100, 650);
+                stage.setScene(aboutScene);
+            });
+
+            // Opens the Help page.
+            helpButton.setOnAction(e -> {
+                Scene helpScene = new Scene(new HelpPage().getView(stage), 1100, 650);
+                stage.setScene(helpScene);
+            });
+
+            // Logs the user out and clears the frontend session.
+            logoutButton.setOnAction(e -> {
+                UserSession.clear();
+
+                Scene loginScene = new Scene(new LoginPage().getView(stage), 1100, 650);
+                stage.setScene(loginScene);
+            });
+
+            // Returns the user to the correct dashboard based on role.
+            backButton.setOnAction(e -> {
             Scene dashboardScene;
 
             if ("FACULTY".equalsIgnoreCase(role)) {
@@ -270,6 +300,22 @@ public class ParkingResultsPage {
         root.setCenter(content);
 
         return root;
+    }
+
+    /**
+     * Navigates the user back to the correct dashboard based on the role
+     * stored in UserSession.
+     */
+    void navigateToDashboard(Stage stage) {
+        String role = UserSession.getRole();
+
+        if ("FACULTY".equalsIgnoreCase(role)) {
+            Scene facultyScene = new Scene(new FacultyDashboardPage().getView(stage), 1100, 650);
+            stage.setScene(facultyScene);
+        } else {
+            Scene studentScene = new Scene(new StudentDashboardPage().getView(stage), 1100, 650);
+            stage.setScene(studentScene);
+        }
     }
 
     /**
