@@ -217,7 +217,7 @@ public class ViewParkingPages {
         role.setStyle("-fx-font-size: 14px; -fx-text-fill: #6B7280;");
 
         // Distance info
-        Label distance = new Label("Distance: " + lot.getDistance() + " miles");
+        Label distance = new Label("Distance: " + lot.getDistance() + " meters");
         distance.setStyle("-fx-font-size: 14px; -fx-text-fill: #6B7280;");
 
         // Status label (color-coded)

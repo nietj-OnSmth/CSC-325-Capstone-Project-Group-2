@@ -243,7 +243,7 @@ public class AdminEditPage {
                         + "\"allowedRole\":\"" + roleField.getText().trim().toUpperCase() + "\","
                         + "\"capacity\":" + capacity + ","
                         + "\"availableSpaces\":" + spaces + ","
-                        + "\"distance in meters\":" + distance + ","
+                        + "\"distance\":" + distance + ","
                         + "\"status\":\"" + status + "\""
                         + "}";
 
