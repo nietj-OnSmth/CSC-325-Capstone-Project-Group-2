@@ -12,8 +12,8 @@ import javafx.scene.layout.BorderPane;
 /**
  * AboutPage displays background information about the SmartPark system.
  *
- * This page explains the purpose of the application and provides
- * a simple way for the user to return to the Student Dashboard.
+ * This page is available to Student and Faculty users and uses
+ * UserSession to return each user to the correct role-based dashboard.
  */
 public class AboutPage {
 
@@ -147,19 +147,37 @@ public class AboutPage {
                         "-fx-cursor: hand;"
         );
 
+        // Sends the user back to the correct role-based dashboard.
+        dashboardButton.setOnAction(e -> navigateToDashboard(stage));
 
-        // Returns the user to the Student/Faculty Dashboard.
-        backButton.setOnAction(e -> {
-            String role = UserSession.getRole();
+        /**
+         * For student/faculty users, Parking returns them to their dashboard.
+         * From there, they can request a recommendation using the dashboard button.
+         * */
+        parkingButton.setOnAction(e -> navigateToDashboard(stage));
 
-            if ("FACULTY".equalsIgnoreCase(role)) {
-                Scene facultyScene = new Scene(new FacultyDashboardPage().getView(stage), 1100, 650);
-                stage.setScene(facultyScene);
-            } else {
-                Scene studentScene = new Scene(new StudentDashboardPage().getView(stage), 1100, 650);
-                stage.setScene(studentScene);
-            }
+        // Reloads the About page.
+        aboutButton.setOnAction(e -> {
+            Scene aboutScene = new Scene(new AboutPage().getView(stage), 1100, 650);
+            stage.setScene(aboutScene);
         });
+
+        // Opens the Help page.
+        helpButton.setOnAction(e -> {
+            Scene helpScene = new Scene(new HelpPage().getView(stage), 1100, 650);
+            stage.setScene(helpScene);
+        });
+
+        // Logs the user out and clears the frontend session.
+        logoutButton.setOnAction(e -> {
+            UserSession.clear();
+
+            Scene loginScene = new Scene(new LoginPage().getView(stage), 1100, 650);
+            stage.setScene(loginScene);
+        });
+
+        // Returns the user to the correct Student/Faculty dashboard.
+        backButton.setOnAction(e -> navigateToDashboard(stage));
 
         contentBox.getChildren().addAll(paragraph1);
 
@@ -169,5 +187,20 @@ public class AboutPage {
         root.setCenter(content);
 
         return root;
+    }
+    /**
+    * Navigates the user back to the correct dashboard based on the role
+    * stored in UserSession.
+    */
+    void navigateToDashboard(Stage stage) {
+        String role = UserSession.getRole();
+
+        if ("FACULTY".equalsIgnoreCase(role)) {
+            Scene facultyScene = new Scene(new FacultyDashboardPage().getView(stage), 1100, 650);
+            stage.setScene(facultyScene);
+        } else {
+            Scene studentScene = new Scene(new StudentDashboardPage().getView(stage), 1100, 650);
+            stage.setScene(studentScene);
+        }
     }
 }
