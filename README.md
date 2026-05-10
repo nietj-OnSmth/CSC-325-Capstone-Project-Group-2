@@ -87,8 +87,7 @@ Admin Features:
   - AVAILABLE  
   - LIMITED  
   - FULL  
-
-* Manage system availability 
+  
 Recommendation System:
 * Selects optimal lot based on:
   * Availability
