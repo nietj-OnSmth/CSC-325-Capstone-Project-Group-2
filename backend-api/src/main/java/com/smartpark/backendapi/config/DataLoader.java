@@ -33,7 +33,7 @@ public class DataLoader {
                 repo.save(new ParkingLot("Lot A", UserRole.STUDENT, 100, 24, 150.0, "AVAILABLE"));
                 repo.save(new ParkingLot("Lot B", UserRole.STUDENT, 90, 0, 220.0, "FULL"));
                 repo.save(new ParkingLot("Lot C", UserRole.FACULTY, 60, 18, 100.0, "AVAILABLE"));
-                repo.save(new ParkingLot("Lot D", UserRole.FACULTY, 75, 5, 180.0, "Limited"));
+                repo.save(new ParkingLot("Lot D", UserRole.FACULTY, 75, 5, 180.0, "LIMITED"));
             }
 
             // Load default users if table is empty

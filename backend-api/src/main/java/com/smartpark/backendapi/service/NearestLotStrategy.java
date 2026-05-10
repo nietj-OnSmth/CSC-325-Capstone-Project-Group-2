@@ -1,5 +1,6 @@
 package com.smartpark.backendapi.service;
 
+import com.smartpark.backendapi.exception.NoAvailableLotException;
 import com.smartpark.backendapi.model.ParkingLot;
 import com.smartpark.backendapi.model.UserRole;
 import org.springframework.stereotype.Component;
@@ -32,8 +33,8 @@ public class NearestLotStrategy implements RecommendationStrategy {
                         .comparingInt(this::getStatusPriority)
                         .thenComparingDouble(ParkingLot::getDistance))
 
-                // Return null if no valid lot is found
-                .orElse(null);
+                // Throw an exception if no valid lot is found
+                .orElseThrow(() -> new NoAvailableLotException("No available lot found."));
     }
 
     /**

@@ -2,6 +2,7 @@ package com.smartpark.backendapi.service;
 
 import com.smartpark.backendapi.dto.LoginRequest;
 import com.smartpark.backendapi.dto.LoginResponse;
+import com.smartpark.backendapi.exception.InvalidCredentialsException;
 import com.smartpark.backendapi.model.AppUser;
 import com.smartpark.backendapi.repository.AppUserRepository;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,11 @@ public class AuthService {
 
         // Find user by username
         AppUser user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("Invalid username or password."));
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid username or password."));
 
         // Validate password
         if (!user.getPassword().equals(request.getPassword())) {
-            throw new RuntimeException("Invalid username or password.");
+            throw new InvalidCredentialsException("Invalid username or password.");
         }
 
         // Return user info and role for frontend routing
