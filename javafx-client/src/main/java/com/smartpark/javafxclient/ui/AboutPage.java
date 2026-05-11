@@ -126,7 +126,7 @@ public class AboutPage {
         );
 
         Label paragraph1 = new Label(
-                "SmartPark is a campus parking application designed to help students, faculty, and visitors find available parking more efficiently. The system is intended to improve the parking experience by providing users with clear and accessible parking information."
+                "SmartPark is a full-stack campus parking management system designed to help students and faculty quickly locate and reserve parking based on real-time availability and proximity. The system provides role-based access, parking recommendations, reservation management, and administrative parking lot controls through an integrated JavaFX frontend and Spring Boot backend."
         );
         paragraph1.setWrapText(true);
         paragraph1.setStyle(
