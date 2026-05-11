@@ -123,7 +123,7 @@ public class AdminEditPage {
         nameField.setPromptText("Lot Name");
 
         TextField roleField = new TextField();
-        roleField.setPromptText("Allowed Role (STUDENT / FACULTY / ADMIN)");
+        roleField.setPromptText("Allowed Role (STUDENT / FACULTY)");
 
         TextField capacityField = new TextField();
         capacityField.setPromptText("Capacity");
@@ -132,7 +132,7 @@ public class AdminEditPage {
         spacesField.setPromptText("Available Spaces");
 
         TextField distanceField = new TextField();
-        distanceField.setPromptText("Distance (example: 150.0)");
+        distanceField.setPromptText("Distance in Meters (example: 150.0)");
 
         String fieldStyle =
                 "-fx-background-radius: 10;" +
