@@ -115,22 +115,22 @@ public class HelpPage {
         );
 
         VBox section1 = createSection(
-                "Choose Your Role",
-                "Start by selecting whether you are a student, faculty member, or visitor on the home screen. This helps the system show you the correct parking options."
+                "Role-based Login",
+                "Log in using your student, faculty, or admin account to access features based on your role. Each role is routed to a different dashboard with permissions specific to that user type."
         );
 
         VBox section2 = createSection(
-                "View Parking Options",
-                "After selecting your role, you will be able to view available parking lots along with their current availability and location information."
+                "View Parking Recommendation",
+                "Students and faculty can request a parking recommendation, which is generated using real-time parking lot availability and distance data retrieved from the backend database."
         );
 
         VBox section3 = createSection(
-                "Select the Best Lot",
-                "Choose the parking lot that best fits your needs based on availability and convenience. Recommended options will be highlighted for you."
+                "Reserve a Parking Spot",
+                "Users can reserve and release parking spots directly from the recommendation page. The system updates parking lot availability and status in real time and stores all reservation data in the database."
         );
 
         Label footer = new Label(
-                "If you need additional assistance, please contact campus parking services."
+                "For additional assistance, please contact campus parking services or a SmartPark administrator."
         );
         footer.setWrapText(true);
         footer.setMaxWidth(700);

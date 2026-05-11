@@ -322,6 +322,11 @@ public class ParkingLotService {
      * @return the lot status as a String
      */
     private String determineLotStatus(int availableSpaces, int capacity) {
+
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("Capacity must be greater than 0.");
+        }
+
         if (availableSpaces <= 0) {
             return "FULL";
         }
